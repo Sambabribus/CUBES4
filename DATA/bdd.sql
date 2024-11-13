@@ -1,7 +1,7 @@
 CREATE TABLE Users(
                       Id_Users INT AUTO_INCREMENT,
                       mail VARCHAR(255) ,
-                      phone_number VARCHAR(20) ,
+                      phone_number VARCHAR(100) ,
                       adresses VARCHAR(255) ,
                       username VARCHAR(255) ,
                       password VARCHAR(255) ,
