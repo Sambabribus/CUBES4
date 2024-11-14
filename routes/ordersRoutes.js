@@ -1,4 +1,3 @@
-// /routes/ordersRoutes.js
 const express = require('express');
 const OrdersController = require('../controllers/ordersController.js');
 

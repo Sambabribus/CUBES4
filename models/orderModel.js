@@ -1,4 +1,3 @@
-// /models/orderModel.js
 const db = require('../config/db');
 
 class OrderModel {
