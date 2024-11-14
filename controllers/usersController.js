@@ -11,6 +11,50 @@ const getAllUsers = (req, res) => {
     });
 };
 
+const getUserById = (req, res) => {
+    User.getUserById(req.params.id, (error, result) => {
+        if (error) {
+            res.status(500).json(error.message);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+const createUser = (req, res) => {
+    User.createUser(req.body, (error, result) => {
+        if (error) {
+            res.status(500).json(error.message);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+const deleteUser = (req, res) => {
+    User.deleteUser(req.params.id, (error, result) => {
+        if (error) {
+            res.status(500).json(error.message);
+        } else {
+            res.json(result);
+        }
+    })
+}
+
+const updateUser = (req, res) => {
+    User.updateUser(req.params.id, req.body, (error, result) => {
+        if (error) {
+            res.status(500).json(error.message);
+        } else {
+            res.json(result);
+        }
+    })
+}
+
 module.exports = {
-    getAllUsers
+    getAllUsers,
+    createUser,
+    getUserById,
+    deleteUser,
+    updateUser
 };
