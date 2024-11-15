@@ -7,14 +7,11 @@ const suppliersRoutes = require('./routes/suppliersRoutes'); // Import des route
 const app = express();
 const port = 3000;
 
-// Middleware
 app.use(cors()); // Gère les requêtes cross-origin
 app.use(bodyParser.json()); // Parse le JSON envoyé dans le corps des requêtes
 
-// Routes
 app.use('/suppliers', suppliersRoutes); // Montre les routes sous /suppliers
 
-// Démarrage du serveur
 app.listen(port, () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
 });
