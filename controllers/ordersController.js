@@ -1,4 +1,4 @@
-const OrderModel = require('../models/orderModel'); // Import du modèle
+const OrderModel = require('../models/OrdersModel'); // Import du modèle
 
 class OrdersController {
     // Créer une commande

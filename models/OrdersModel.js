@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-class OrderModel {
+class OrdersModel {
     static async create(order_date, quantity, Id_Users) {
         const query = `INSERT INTO Orders (order_date, quantity, Id_Users) VALUES (?, ?, ?)`;
         const [result] = await db.query(query, [order_date, quantity, Id_Users]);
@@ -32,4 +32,4 @@ class OrderModel {
     }
 }
 
-module.exports = OrderModel;
+module.exports = OrdersModel;
