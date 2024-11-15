@@ -7,8 +7,13 @@
     "name": ""
   },
   "devDependencies": {
-    "eslint": "^8.21.0"
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.31.0"
   },
-  "eslintConfig": {
+  "eslintConfig": {},
+  "dependencies": {
+    "ESLint": "npm:eslint@^8.57.1",
+    "express": "^4.21.1",
+    "mysql2": "^3.11.4"
   }
 }

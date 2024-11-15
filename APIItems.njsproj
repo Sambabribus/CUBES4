@@ -28,9 +28,30 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".env">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="app.js" />
+    <Content Include="config\db.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="controllers\itemControllers.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="models\itemModels.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="routes\itemRoutes.js">
+      <SubType>Code</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="controllers\" />
+    <Folder Include="models\" />
+    <Folder Include="config\" />
+    <Folder Include="routes\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
 </Project>

@@ -1,20 +1,15 @@
 const express = require('express');
-const cors = require('cors');
-const itemRoutes = require('./routes/itemRoutes');
+const bodyParser = require('body-parser');
 require('dotenv').config();
 
+const itemRoutes = require('./routes/itemRoutes');
+
 const app = express();
+app.use(bodyParser.json());
 
-app.use(cors());
-app.use(express.json());
-
-
-
-//Routes
 app.use('/api/items', itemRoutes);
 
-//Demarrage du serveur
-const PORT = process.env.PORT || 3300;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

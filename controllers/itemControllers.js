@@ -1,111 +1,75 @@
-const itemModel = require('../models/ItemModels');
+const Items = require('../models/itemModels');
+
+// Créer un nouvel item
+exports.createItem = (req, res) => {
+    Items.create(req.body, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erreur lors de la création de l\'item');
+        }
+        res.status(201).send({ id: result.insertId, message: 'Item créé avec succès' });
+    });
+};
 
 // Récupérer tous les items
 exports.getAllItems = (req, res) => {
-    itemModel.getAllItems((err, result) => {
+    Items.findAll((err, results) => {
         if (err) {
-            res.status(500).json({ error: 'Erreur lors de la récupération des items' });
-        } else {
-            res.status(200).json(result);
+            console.error(err);
+            return res.status(500).send('Erreur lors de la récupération des items');
         }
+        res.status(200).send(results);
     });
 };
 
 // Récupérer un item par ID
 exports.getItemById = (req, res) => {
-    const itemId = req.params.id;
-    itemModel.getItemById(itemId, (err, result) => {
+    Items.findById(req.params.id, (err, results) => {
         if (err) {
-            res.status(500).json({ error: 'Erreur lors de la récupération de l\'item' });
-        } else if (!result) {
-            res.status(404).json({ message: 'Item non trouvé' });
-        } else {
-            res.status(200).json(result);
+            console.error(err);
+            return res.status(500).send('Erreur lors de la récupération de l\'item');
         }
+        if (results.length === 0) {
+            return res.status(404).send('Item non trouvé');
+        }
+        res.status(200).send(results[0]);
     });
-};
-
-// Ajouter un nouvel item
-exports.createItem = (req, res) => {
-    const { name, type_alcohol, domain_name, millesime, purchase_price, selling_price, stock_quantity, description, Id_Suppliers, Id_Orders } = req.body;
-
-    if (!name || !type_alcohol || !domain_name || !millesime || !purchase_price || !selling_price || !stock_quantity || !description || !Id_Suppliers || !Id_Orders) {
-        return res.status(400).json({ error: 'Tous les champs sont obligatoires' });
-    }
-
-    itemModel.createItem(
-        { name, type_alcohol, domain_name, millesime, purchase_price, selling_price, stock_quantity, description, Id_Suppliers, Id_Orders },
-        (err, result) => {
-            if (err) {
-                res.status(500).json({ error: `Erreur lors de la création de l'item : ${err.message}` });
-            } else {
-                res.status(201).json({ message: 'Item créé avec succès', id: result.insertId });
-            }
-        }
-    );
 };
 
 // Mettre à jour un item par ID
-exports.updateItemById = (req, res) => {
-    const itemId = req.params.id;
-    const {
-        name,
-        type_alcohol,
-        domain_name,
-        millesime,
-        purchase_price,
-        selling_price,
-        stock_quantity,
-        description,
-        Id_Suppliers,
-        Id_Orders
-    } = req.body;
-
-    if (!name || !type_alcohol || !domain_name || !millesime || !purchase_price || !selling_price || !stock_quantity || !description || !Id_Suppliers || !Id_Orders) {
-        return res.status(400).json({ error: 'Tous les champs sont obligatoires pour la mise à jour' });
-    }
-
-    itemModel.updateItemById(
-        itemId,
-        {
-            name,
-            type_alcohol,
-            domain_name,
-            millesime,
-            purchase_price,
-            selling_price,
-            stock_quantity,
-            description,
-            Id_Suppliers,
-            Id_Orders
-        },
-        (err, result) => {
-            if (err) {
-                res.status(500).json({ error: `Erreur lors de la mise à jour de l'item : ${err.message}` });
-            } else if (result.affectedRows === 0) {
-                res.status(404).json({ message: 'Item non trouvé' });
-            } else {
-                res.status(200).json({ message: `Item avec l'ID ${itemId} mis à jour` });
-            }
-        }
-    );
-};
-
-// Supprimer un item par ID
-exports.deleteItemById = (req, res) => {
-    const itemId = req.params.id;
-
-    if (isNaN(itemId)) {
-        return res.status(400).json({ error: 'ID invalide' });
-    }
-
-    itemModel.deleteItemById(itemId, (err, result) => {
+exports.updateItem = (req, res) => {
+    Items.update(req.params.id, req.body, (err, result) => {
         if (err) {
-            res.status(500).json({ error: `Erreur lors de la suppression de l'item : ${err.message}` });
-        } else if (result.affectedRows === 0) {
-            res.status(404).json({ message: 'Item non trouvé' });
-        } else {
-            res.status(200).json({ message: `Item avec l'ID ${itemId} supprimé` });
+            console.error(err);
+            return res.status(500).send('Erreur lors de la mise à jour de l\'item');
         }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Item non trouvé');
+        }
+        res.status(200).send('Item mis à jour avec succès');
     });
 };
+
+exports.deleteItem = (req, res) => {
+    Items.delete(req.params.id, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erreur lors de la suppression de l\'item');
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Item non trouvé');
+        }
+        res.status(200).send('Item supprimé avec succès');
+    });
+};
+exports.getAllItems = (req, res) => {
+    Items.findAll((err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erreur lors de la récupération des items');
+        }
+        res.status(200).send(results); // Renvoie les résultats sous forme de JSON
+    });
+};
+
+
