@@ -1,0 +1,14 @@
+{
+  "name": "apiitems",
+  "version": "0.0.0",
+  "description": "APIItems",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "eslint": "^8.21.0"
+  },
+  "eslintConfig": {
+  }
+}
