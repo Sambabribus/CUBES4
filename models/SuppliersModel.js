@@ -1,26 +1,35 @@
 const db = require('../config/db');
 
 const Suppliers = {
-    create: (data, callback) => {
+    create: async (data) => {
         const sql = 'INSERT INTO Suppliers (name, adresses, phone_number, mail, region, alcohol_provided) VALUES (?, ?, ?, ?, ?, ?)';
-        db.query(sql, [data.name, data.adresses, data.phone_number, data.mail, data.region, data.alcohol_provided], callback);
+        const [result] = await db.query(sql, [data.name, data.adresses, data.phone_number, data.mail, data.region, data.alcohol_provided]);
+        return result;
     },
-    findAll: (callback) => {
+
+    findAll: async () => {
         const sql = 'SELECT * FROM Suppliers';
-        db.query(sql, callback);
+        const [results] = await db.query(sql);
+        return results;
     },
-    findById: (id, callback) => {
+
+    findById: async (id) => {
         const sql = 'SELECT * FROM Suppliers WHERE Id_Suppliers = ?';
-        db.query(sql, [id], callback);
+        const [results] = await db.query(sql, [id]);
+        return results;
     },
-    update: (id, data, callback) => {
+
+    update: async (id, data) => {
         const sql = 'UPDATE Suppliers SET name = ?, adresses = ?, phone_number = ?, mail = ?, region = ?, alcohol_provided = ? WHERE Id_Suppliers = ?';
-        db.query(sql, [data.name, data.adresses, data.phone_number, data.mail, data.region, data.alcohol_provided, id], callback);
+        const [result] = await db.query(sql, [data.name, data.adresses, data.phone_number, data.mail, data.region, data.alcohol_provided, id]);
+        return result;
     },
-    delete: (id, callback) => {
+
+    delete: async (id) => {
         const sql = 'DELETE FROM Suppliers WHERE Id_Suppliers = ?';
-        db.query(sql, [id], callback);
-    }
+        const [result] = await db.query(sql, [id]);
+        return result;
+    },
 };
 
 module.exports = Suppliers;
