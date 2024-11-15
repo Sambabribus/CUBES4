@@ -58,4 +58,3 @@ exports.deleteSupplier = async (req, res) => {
         res.status(500).send('Erreur lors de la suppression du fournisseur');
     }
 };
-//a
