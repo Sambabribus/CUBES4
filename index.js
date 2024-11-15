@@ -7,11 +7,11 @@ const app = express();
 // port d'écoute
 const port = 3000;
 // Importation des routes utilisateurs
-const userRouter = require('./routes/userRoutes');
+const userRouter = require('./routes/usersRoutes');
 
 // Permet à Express de traiter les données JSON dans le corps des requetes HTTP
 app.use(express.json());
-// Indique à Express d'utiliser les routes définies dans le ficher userRoutes.js commençant par le chemin api/users
+// Indique à Express d'utiliser les routes définies dans le ficher usersRoutes.js commençant par le chemin api/users
 app.use('/api/users', userRouter);
 
 // Démarage du serveur + affichage message de connexion ok

@@ -1,6 +1,6 @@
-const db = require("../config/database");
+const db = require("../config/db");
 
-const Users = {
+const UsersModel = {
     // callback est une fonction passée en argument quand on appelle la fonction getAllUsers
     // Cela pécifie ce qui doit se passer aprés la récuperation des données dans la bdd
     getAllUsers: (callback) => {
@@ -96,4 +96,4 @@ const Users = {
 
 };
 
-module.exports = Users;
+module.exports = UsersModel;
