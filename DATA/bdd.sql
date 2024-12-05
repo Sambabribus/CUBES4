@@ -26,7 +26,7 @@ CREATE TABLE Suppliers(
 
 CREATE TABLE Orders(
                        Id_Orders INT AUTO_INCREMENT,
-                       order_date DATETIME,
+                       order_date DATE,
                        quantity INT,
                        Id_Users INT NOT NULL,
                        PRIMARY KEY(Id_Orders),
