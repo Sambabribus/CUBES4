@@ -15,6 +15,13 @@ const Items = {
 
     // Insérer un nouvel item dans la base de données
     create: (data, callback) => {
+        // Mise en place des 2 lignes pour prendre en compte en JSON "supplier":{"Id_Suppliers":3},"order":{"id_Orders":9} au lieu de "Id_Suppliers":12,
+        // "Id_Orders": 9
+        // data.supplier verifie si data posséde une propriété et si cette propriété n'est pas null
+        // ? operateur ternaire identique a if else
+        // Si data.supplier est defini, il retourne data.supplier.Id_Suppliers sinon renvoi null
+        const supplierId = data.supplier ? data.supplier.Id_Suppliers : null;
+        const orderId = data.order ? data.order.id_Orders : null;
         const sql = `
             INSERT INTO Items 
             (name, type_alcohol, domain_name, millesime, purchase_price, selling_price, stock_quantity, description, Id_Suppliers, Id_Orders)
@@ -29,8 +36,8 @@ const Items = {
             data.selling_price,
             data.stock_quantity,
             data.description,
-            data.Id_Suppliers,
-            data.Id_Orders,
+            supplierId,
+            orderId,
         ];
         db.query(sql, values, callback);
     },
