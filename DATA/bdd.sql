@@ -7,7 +7,7 @@ CREATE TABLE Users(
                       password VARCHAR(255) ,
                       first_name VARCHAR(255) ,
                       birthday DATE,
-                      gender VARCHAR(8) ,
+                      gender VARCHAR(6) ,
                       last_name VARCHAR(255) ,
                       isAdmin BOOLEAN,
                       PRIMARY KEY(Id_Users)
