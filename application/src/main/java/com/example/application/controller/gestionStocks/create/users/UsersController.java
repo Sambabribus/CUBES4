@@ -39,9 +39,9 @@ public class UsersController {
     // Methode pour initialiser les structures et les données de l'appli par classe
     public void initialize() {
         // Ajout des genres
-        genreComboBox.getItems().addAll("Masculin", "Feminin", "Autre");
+        genreComboBox.getItems().addAll("Homme", "Femme", "Autre");
         // Valeur par defaut
-        genreComboBox.setValue("Masculin");
+        genreComboBox.setValue("Homme");
 
     }
 
