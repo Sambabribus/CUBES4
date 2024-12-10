@@ -12,6 +12,10 @@ const suppliersRouter = require('./routes/suppliersRoutes');
 const ordersRouter = require('./routes/ordersRoutes');
 const itemsRouter = require('./routes/itemsRoutes');
 
+const ordersSuppliersRouter = require('./routes/ordersSuppliersRoutes');
+const ordersSuppliersDetailsRouter = require('./routes/ordersSuppliersDetailsRoutes');
+const ordersUsersDetailsRouter = require('./routes/ordersUsersDetailsRoutes');
+
 // Permet à Express de traiter les données JSON dans le corps des requetes HTTP
 app.use(express.json());
 // Indique à Express d'utiliser les routes définies dans le ficher usersRoutes.js commençant par le chemin api/users
@@ -19,6 +23,10 @@ app.use('/api/users', userRouter);
 app.use('/api/suppliers', suppliersRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/items', itemsRouter);
+
+app.use('/api/orders-suppliers', ordersSuppliersRouter);
+app.use('/api/orders-suppliers-details', ordersSuppliersDetailsRouter);
+app.use('/api/orders-users-details', ordersUsersDetailsRouter);
 
 // Démarage du serveur + affichage message de connexion ok
 app.listen(port, () => {
