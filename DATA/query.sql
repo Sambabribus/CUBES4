@@ -1,4 +1,4 @@
-INSERT INTO items (name, type_alcohol, domain_name, millesime, purchase_price, selling_price, stock_quantity, description)
+INSERT INTO items (name, alcohol_type, domain_name, millesime, purchase_price, selling_price, stock_quantity, description)
 VALUES
     ('Tariquet Classic', 'Vin blanc sec', 'Domaine Tariquet', '2022', 5.50, 8.90, 120, 'Vin blanc sec frais et fruité.'),
     ('Armagnac VSOP', 'Armagnac', 'Domaine Tariquet', '2015', 20.00, 35.00, 50, 'Armagnac raffiné vieilli en fût de chêne.'),
@@ -41,14 +41,14 @@ VALUES
     ('Brumont Blanc Sec', 'Vin blanc sec', 'Les Vignobles Brumont', '2021', 14.00, 22.00, 50, 'Vin blanc sec élégant et minéral.'),
     ('Brumont Torus Blanc', 'Pacherenc', 'Les Vignobles Brumont', '2020', 12.00, 18.00, 45, 'Vin blanc doux aux arômes exotiques.');
 
-INSERT INTO users (`first_name`, `last_name`, `mail`, `phone_number`, `username`, `password`, `birthday`, `gender`, `address`, `isAdmin`)
+INSERT INTO users (`first_name`, `last_name`, `mail`, `phone_number`, `username`, `password`, `birthday`, `address`, `gender`, `isAdmin`)
 VALUES
     ('Marie', 'Dubois', 'marie.dubois@gmail.com', '0616378353', 'blandit', 'ipsum', '1975-05-30', '44 Rue Bonnet, Wattrelos, 59150', 'female', '0'),
     ('Jean', 'Martin', 'jean.martin@gmail.com', '0688883939', 'facilisis', 'Integer', '1986-05-23', '64 Rue Michel Ange, Le Havre, 76600', 'male', '0'),
     ('Sophie', 'Durand', 'sophie.durand@gmail.com', '0642768583', 'Curabitur', 'non,', '1972-08-25', '49 Rue Beauvau, Marseille, 13002', 'female', '0'),
     ('Louis', 'Lemoine', 'louis.lemoine@gmail.com', '0678276485', 'turpis.', 'ridiculus', '1983-04-10', '3 Boulevard d\'Alsace, Vénissieux, 69200', 'male', '0'),
     ('Claire', 'Morel', 'claire.morel@gmail.com', '0687837837', 'amet,', 'consequat', '1939-06-25', '23 Rue Pierre De Coubertin, Toulouse, 31300', 'female', '0'),
-    ('Paul', 'Bertrand', 'paul.bertrand@gmail.com', '0754789662', 'lacus.', 'Suspendisse', '82 Rue Bonnet, Yerres, 91330', '1992-07-30', 'male', '0'),
+    ('Paul', 'Bertrand', 'paul.bertrand@gmail.com', '0754789662', 'lacus.', 'Suspendisse', '1992-07-30', '82 Rue Bonnet, Yerres, 91330', 'male', '0'),
     ('Lucie', 'Fontaine', 'lucie.fontaine@gmail.com', '0733698877', 'arcu', 'justo', '2013-07-24', '10 Avenue de l\'Épi d\'Or, Villejuif, 94800', 'female', '0'),
     ('Henri', 'Roux', 'henri.roux@gmail.com', '0776243429', 'consectetuer', 'aliquet', '1923-01-02', '466 Rue des Serres, Loiret, 45590', 'male', '0'),
     ('Élise', 'Blanc', 'elise.blanc@gmail.com', '0711881521', 'taciti', 'augue', '1960-07-05', '2 Rue d\'Azey, Saône-et-Loire, 71400', 'female', '0'),
@@ -100,9 +100,9 @@ VALUES
     (5, 8.99, 3, 19),
     (12, 22.49, 4, 8),
     (18, 35.75, 6, 12),
-    (25, 60.20, 11, 1),
-    (10, 15.00, 15, 7),
-    (7, 10.50, 19, 20);
+    (25, 60.20, 8, 1),
+    (10, 15.00, 2, 7),
+    (7, 10.50, 9, 20);
 
 INSERT INTO orders (order_date, Id_users)
 VALUES
@@ -117,15 +117,15 @@ VALUES
     ('2024-11-09 10:00:00', 9),
     ('2024-11-10 18:45:00', 10);
 
-INSERT INTO orders_users_details (quantity, price, Id_items, Id_orders)
+INSERT INTO orders_users_details (quantity, price, Id_orders, Id_items)
 VALUES
     (5, 10.99, 2, 15),
     (8, 20.50, 4, 7),
     (12, 35.25, 10, 3),
     (6, 12.75, 8, 18),
     (15, 50.00, 1, 5),
-    (20, 45.99, 14, 9),
+    (20, 45.99, 7, 9),
     (9, 22.49, 3, 12),
     (13, 30.75, 6, 11),
-    (7, 18.99, 19, 4),
-    (10, 25.00, 12, 16);
+    (7, 18.99, 1, 4),
+    (10, 25.00, 9, 16);

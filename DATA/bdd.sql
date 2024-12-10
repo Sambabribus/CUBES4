@@ -20,7 +20,7 @@ CREATE TABLE users(
    password VARCHAR(255) ,
    first_name VARCHAR(255) ,
    birthday DATE,
-   gender VARCHAR(6) ,
+   gender VARCHAR(10) ,
    last_name VARCHAR(255) ,
    isAdmin BOOLEAN,
    PRIMARY KEY(Id_users),
