@@ -3,13 +3,13 @@ const db = require('../config/db');
 const Items = {
     // Récupérer tous les items
     findAll: (callback) => {
-        const sql = 'SELECT * FROM Items';
+        const sql = 'SELECT * FROM items';
         db.query(sql, callback);
     },
 
     // Récupérer un item par ID
     findById: (id, callback) => {
-        const sql = 'SELECT * FROM Items WHERE Id_Items = ?';
+        const sql = 'SELECT * FROM items WHERE Id_items = ?';
         db.query(sql, [id], callback);
     },
 
@@ -20,24 +20,20 @@ const Items = {
         // data.supplier verifie si data posséde une propriété et si cette propriété n'est pas null
         // ? operateur ternaire identique a if else
         // Si data.supplier est defini, il retourne data.supplier.Id_Suppliers sinon renvoi null
-        const supplierId = data.supplier ? data.supplier.Id_Suppliers : null;
-        const orderId = data.order ? data.order.id_Orders : null;
         const sql = `
-            INSERT INTO Items 
-            (name, type_alcohol, domain_name, millesime, purchase_price, selling_price, stock_quantity, description, Id_Suppliers, Id_Orders)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO items
+            (name, alcohol_type, domain_name, millesime, purchase_price, selling_price, stock_quantity, description)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             data.name,
-            data.type_alcohol,
+            data.alcohol_type,
             data.domain_name,
             data.millesime,
             data.purchase_price,
             data.selling_price,
             data.stock_quantity,
-            data.description,
-            supplierId,
-            orderId,
+            data.description
         ];
         db.query(sql, values, callback);
     },
@@ -45,31 +41,27 @@ const Items = {
     // Mettre à jour un item par ID
     update: (id, data, callback) => {
         const sql = `
-            UPDATE Items 
-            SET 
-                name = ?, 
-                type_alcohol = ?, 
-                domain_name = ?, 
-                millesime = ?, 
-                purchase_price = ?, 
-                selling_price = ?, 
-                stock_quantity = ?, 
-                description = ?, 
-                Id_Suppliers = ?, 
-                Id_Orders = ?
-            WHERE Id_Items = ?
+            UPDATE items
+            SET
+                name = ?,
+                alcohol_type = ?,
+                domain_name = ?,
+                millesime = ?,
+                purchase_price = ?,
+                selling_price = ?,
+                stock_quantity = ?,
+                description = ?
+            WHERE Id_items = ?
         `;
         const values = [
             data.name,
-            data.type_alcohol,
+            data.alcohol_type,
             data.domain_name,
             data.millesime,
             data.purchase_price,
             data.selling_price,
             data.stock_quantity,
             data.description,
-            data.Id_Suppliers,
-            data.Id_Orders,
             id,
         ];
         db.query(sql, values, callback);
@@ -77,7 +69,7 @@ const Items = {
 
     // Supprimer un item par ID
     delete: (id, callback) => {
-        const sql = 'DELETE FROM Items WHERE Id_Items = ?';
+        const sql = 'DELETE FROM items WHERE Id_items = ?';
         db.query(sql, [id], callback);
     },
 };

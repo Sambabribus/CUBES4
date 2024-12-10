@@ -1,4 +1,4 @@
-const User = require('../models/UsersModel');
+const User = require('../models/usersModel');
 
 const getAllUsers = (req, res) => {
     // Appel de la fonction dans Users

@@ -1,4 +1,4 @@
-const Suppliers = require('../models/SuppliersModel');
+const Suppliers = require('../models/suppliersModel');
 
 exports.createSupplier = (req, res) => {
     Suppliers.create(req.body, (err, result) => {

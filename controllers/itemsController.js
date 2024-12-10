@@ -1,4 +1,4 @@
-const Items = require('../models/ItemsModels');
+const Items = require('../models/itemsModels');
 
 // Créer un nouvel item
 exports.createItem = (req, res) => {
