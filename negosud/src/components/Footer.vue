@@ -1,5 +1,10 @@
 <template>
     <footer>
+        <p>
+            1 rue du caviste
+            13110 vin du sud
+        </p>
+        <p>negosud@caviste.fr</p>
         <p>&copy; 2025 NEGOSUD</p>
     </footer>
 </template>
@@ -8,6 +13,6 @@
     footer {
         text-align: center;
         padding: 20px;
-        background: #f4f4f4;
+        background: #F1F2E0;
     }
 </style>
