@@ -46,11 +46,13 @@ export const addToCart = async (productId, quantity) => {
     }
 };
 
-//Passer une commande
 export const placeOrder = async (orderData) => {
     try {
         const response = await apiClient.post('/orders', orderData);
-        return response1.data;
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la commande :', error);
+        throw error; // Propager l'erreur si nécessaire
     }
 };
 

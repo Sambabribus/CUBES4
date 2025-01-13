@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './routes'; // Import du fichier route.js
+import router from './routes/router'; // Import du fichier route.js
 import './assets/style.css'; // Optionnel : Import des styles globaux
 
 const app = createApp(App); // Création de l'application Vue

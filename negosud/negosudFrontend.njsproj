@@ -30,6 +30,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".env" />
+    <Content Include=".eslintrc.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="app.js" />
     <Content Include="src\App.vue">
       <SubType>Code</SubType>
@@ -75,6 +78,7 @@
     <Content Include="src\services\mockData.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\services\newFile.js" />
     <Content Include="src\views\Cart.vue">
       <SubType>Code</SubType>
     </Content>

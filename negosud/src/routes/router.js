@@ -3,7 +3,7 @@ import Home from '@/views/Home.vue';
 import ProductPage from '@/views/ProductPage.vue';
 import Cart from '@/views/Cart.vue';
 import Checkout from '@/views/Checkout.vue';
-import Login from '@/views/Login.vue';
+import Login from '@/views/login.vue';
 import Profile from '@/views/Profile.vue';
 
 const routes = [
