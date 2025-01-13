@@ -1,0 +1,25 @@
+{
+  "name": "negosud",
+  "version": "0.0.0",
+  "description": "negosud",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "eslint": "^8.21.0"
+  },
+  "eslintConfig": {},
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@vue/compiler-sfc": "^3.2.13",
+    "vue": "^3.2.13",
+    "vue-router": "^4.5.0"
+  }
+}
