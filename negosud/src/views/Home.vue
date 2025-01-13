@@ -49,8 +49,13 @@
         },
         methods: {
             async fetchTopProducts() {
-                const response = await axios.get("/api/items?top=true");
-                this.topProducts = response.data;
+                try {
+                    const response = await axios.get("/api/items?top=true");
+                    this.topProducts = response.data;
+                } catch (error) {
+                    console.error("Erreur lors de la requête Axios :", error.message);
+                    console.error("Détails de l'erreur :", error);
+                }
             },
             async fetchProducts() {
                 const response = await axios.get("/api/items", {
