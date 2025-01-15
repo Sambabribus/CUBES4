@@ -71,3 +71,15 @@ exports.getAllItems = (req, res) => {
         res.status(200).send(results); // Renvoie les résultats sous forme de JSON
     });
 };
+exports.sellUsers = (req, res) => {
+    const { Id_items, quantity, Id_users } = req.body;
+
+    Items.sellUsers(Id_items, quantity, Id_users, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send(err.message || 'Erreur lors de la vente de l\'article');
+        }
+
+        res.status(200).send(result);
+    });
+};
