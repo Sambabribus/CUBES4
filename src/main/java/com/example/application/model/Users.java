@@ -1,16 +1,18 @@
 package com.example.application.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
 // Ignore les champs inconnus lors du retour de la requete en JSON
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Users {
-    private int Id_Users;
+    @JsonProperty("Id_users")
+    private int Id_users;
     private String mail;
     private String phone_number;
-    private String adresses;
+    private String address;
     private String username;
     private String password;
     private String first_name;
@@ -25,13 +27,16 @@ public class Users {
 
     }
 
-
-    public int getId_Users() {
-        return Id_Users;
+    @Override
+    public String toString() {
+        return mail;
+    }
+    public int getId_users() {
+        return Id_users;
     }
 
-    public void setId_Users(int id_Users) {
-        Id_Users = id_Users;
+    public void setId_users(int id_users) {
+        Id_users = id_users;
     }
 
     public String getMail() {
@@ -50,12 +55,12 @@ public class Users {
         this.phone_number = phone_number;
     }
 
-    public String getAdresses() {
-        return adresses;
+    public String getaddress() {
+        return address;
     }
 
-    public void setAdresses(String adresses) {
-        this.adresses = adresses;
+    public void setaddress(String address) {
+        this.address = address;
     }
 
     public String getUsername() {
@@ -105,4 +110,6 @@ public class Users {
     public void setBirthday(LocalDate birthdate) {
         this.birthday = birthdate;
     }
+
+
 }

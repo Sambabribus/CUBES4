@@ -9,9 +9,7 @@ public class HomeGestionStocks {
         homeModules.openNewWindow("/gestionStocks/create/createView.fxml", "Creation d'une fiche");
     }
 
-    public void modifyStocks(ActionEvent actionEvent) {
-    }
-
     public void commands(ActionEvent actionEvent) {
+        homeModules.openNewWindow("/gestionStocks/commands/homeCommands.fxml", "Passer une commande");
     }
 }

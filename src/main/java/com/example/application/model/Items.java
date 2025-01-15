@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Items {
+    @JsonProperty("Id_items")
     private int Id_Items;
     private String name;
-    private String type_alcohol;
+    private String alcohol_type;
     private String domain_name;
     private String millesime;
     private double purchase_price;
@@ -27,7 +28,10 @@ public class Items {
     public Items() {
 
     }
-
+    @Override
+    public String toString() {
+        return name;
+    }
     public int getId_Items() {
         return Id_Items;
     }
@@ -44,12 +48,12 @@ public class Items {
         this.name = name;
     }
 
-    public String getType_alcohol() {
-        return type_alcohol;
+    public String getalcohol_type() {
+        return alcohol_type;
     }
 
-    public void setType_alcohol(String type_alcohol) {
-        this.type_alcohol = type_alcohol;
+    public void setalcohol_type(String alcohol_type) {
+        this.alcohol_type = alcohol_type;
     }
 
     public String getDomain_name() {
@@ -115,4 +119,6 @@ public class Items {
     public void setOrder(Orders order) {
         this.order = order;
     }
+
+
 }

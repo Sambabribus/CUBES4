@@ -17,8 +17,6 @@ import java.util.List;
 
 public class ItemsController {
     private final AlertMessages alertMessages;
-    private final OrdersService ordersService;
-    private final SuppliersService suppliersService;
     private final ItemsService itemsService;
     @FXML
     private TextField nameField;
@@ -36,45 +34,30 @@ public class ItemsController {
     private TextField stockQuantityField;
     @FXML
     private TextField descriptionField;
-    @FXML
-    private ComboBox<Suppliers> supplierField;
-    @FXML
-    private ComboBox<Orders> orderField;
 
     public ItemsController() {
-        this.ordersService = new OrdersService();
-        this.suppliersService = new SuppliersService();
         this.itemsService = new ItemsService();
         this.alertMessages = new AlertMessages();
-    }
-
-    public void initialize() {
-        List<Suppliers> suppliers = suppliersService.getAllSuppliers();
-        supplierField.setItems(FXCollections.observableList(suppliers));
-        List<Orders> orders = ordersService.getAllOrders();
-        orderField.setItems(FXCollections.observableList(orders));
     }
 
     public void handleCreateButton(ActionEvent actionEvent) {
 
         if (nameField.getText().isEmpty() || typeAlcoholField.getText().isEmpty() || domainNameField.getText().isEmpty() || millesimeField.getText().isEmpty()
                 || purchasePriceField.getText().isEmpty() || sellingPriceField.getText().isEmpty() || stockQuantityField.getText().isEmpty()
-                || descriptionField.getText().isEmpty() || supplierField.getValue() == null || orderField.getValue() == null) {
+                || descriptionField.getText().isEmpty()) {
 
             alertMessages.errorMessage("Erreur", "Tous les champs doivent etre completés");
         } else {
 
             Items item = new Items();
             item.setName(nameField.getText());
-            item.setType_alcohol(typeAlcoholField.getText());
+            item.setalcohol_type(typeAlcoholField.getText());
             item.setDomain_name(domainNameField.getText());
             item.setMillesime(millesimeField.getText());
             item.setPurchase_price(Double.parseDouble(purchasePriceField.getText()));
             item.setSelling_price(Double.parseDouble(sellingPriceField.getText()));
             item.setStock_quantity(Integer.parseInt(stockQuantityField.getText()));
             item.setDescription(descriptionField.getText());
-            item.setSupplier(supplierField.getValue());
-            item.setOrder(orderField.getItems().getLast());
 
             itemsService.createItem(item);
 

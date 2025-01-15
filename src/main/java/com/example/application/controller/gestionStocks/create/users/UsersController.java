@@ -56,7 +56,7 @@ public class UsersController {
             users.setFirst_name(firstNameField.getText());
             users.setLast_name(nameField.getText());
             users.setMail(emailField.getText());
-            users.setAdresses(addressField.getText());
+            users.setaddress(addressField.getText());
             users.setPassword(passwordField.getText());
             users.setPhone_number(phoneField.getText());
             users.setGender(genreComboBox.getValue());

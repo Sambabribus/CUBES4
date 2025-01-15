@@ -6,11 +6,11 @@ import java.util.Date;
 
 public class Orders {
     // Annotation de la librairie jackson sinon il n'arrive pas à désérialiser le nom de l'id
-    @JsonProperty("Id_Orders")
+    @JsonProperty("Id_orders")
     private int Id_Orders;
     private Date order_date;
     private int quantity;
-    @JsonProperty("Id_Users")
+    @JsonProperty("Id_users")
     private int Id_User;
     private Users user;
 

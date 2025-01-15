@@ -60,18 +60,6 @@
             <Label text="Description :" />
             <TextField fx:id="descriptionField" maxWidth="150" />
         </VBox>
-
-        <!-- ID du fournisseur -->
-        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
-            <Label text="Fournisseur :" />
-            <ComboBox fx:id="supplierField" maxWidth="150" />
-        </VBox>
-
-        <!-- ID de la commande -->
-        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
-            <Label text="Commande :" />
-            <ComboBox fx:id="orderField" maxWidth="150" />
-        </VBox>
     </VBox>
 
     <HBox spacing="30" alignment="CENTER">

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Suppliers {
-    @JsonProperty("Id_Suppliers")
+    @JsonProperty("Id_suppliers")
     private int Id_Suppliers;
     private String name;
     private String adresses;
