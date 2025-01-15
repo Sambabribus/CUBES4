@@ -71,6 +71,21 @@ exports.getAllItems = (req, res) => {
         res.status(200).send(results); // Renvoie les résultats sous forme de JSON
     });
 };
+
+// Ajouter des stocks
+exports.addStocks = (req, res) => {
+    const { Id_items, quantity, Id_suppliers } = req.body;
+
+    Items.addStocks(Id_items, quantity, Id_suppliers, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send(err.message || 'Erreur lors de l\'ajout du stock');
+        }
+        res.status(200).send(result);
+    });
+};
+
+// Vendre des articles aux utilisateurs
 exports.sellUsers = (req, res) => {
     const { Id_items, quantity, Id_users } = req.body;
 
@@ -79,7 +94,6 @@ exports.sellUsers = (req, res) => {
             console.error(err);
             return res.status(500).send(err.message || 'Erreur lors de la vente de l\'article');
         }
-
         res.status(200).send(result);
     });
 };

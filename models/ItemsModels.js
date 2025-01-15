@@ -109,6 +109,38 @@ const Items = {
         });
     },
 
+    addStocks: (Id_items, quantity, Id_suppliers, callback) => {
+            // Récupérer le prix de vente
+            db.query('SELECT stock_quantity, selling_price FROM items WHERE Id_items = ?', [Id_items], (err, result) => {
+                if (err) return callback(err);
+                // Garder en memooire la valeur de selling_price pour la re utiliser dans la derniere query
+                const { selling_price } = result[0];
+
+                // Mise à jour du stock
+                db.query('UPDATE items SET stock_quantity = stock_quantity + ? WHERE Id_items = ?', [quantity, Id_items], (err) => {
+                    if (err) return callback(err);
+
+                    // Création de la commande
+                    db.query('INSERT INTO orders_suppliers (order_date, Id_suppliers) VALUES (NOW(), ?)', [Id_suppliers], (err, orderResult) => {
+                        if (err) return callback(err);
+
+                        const orderId = orderResult.insertId;
+
+                        // Enregistrement des détails de la commande avec le selling_price
+                        db.query(
+                            'INSERT INTO orders_suppliers_details (quantity, price, Id_items, Id_orders_suppliers) VALUES (?, ?, ?, ?)',
+                            [quantity, selling_price, Id_items, orderId], // Utiliser selling_price ici
+                            (err) => {
+                                if (err) return callback(err);
+
+                                callback(null, { message: 'Commande effectuée avec succès', orderId });
+                            }
+                        );
+                    });
+                });
+            });
+        },
+
 };
 
 module.exports = Items;
