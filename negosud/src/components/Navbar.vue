@@ -1,26 +1,3 @@
-<script>
-    export default {
-        name: "Navbar",
-        data() {
-            return {
-                links: [],
-            };
-        },
-        mounted() {
-            if (process.env.VUE_APP_USE_MOCK === "true") {
-                this.links = [
-                    { name: "Accueil", path: "/" },
-                    { name: "Profil", path: "/profile" },
-                    { name: "Produits", path: "/products" },
-                ];
-            } else {
-                // Charger les liens via l'API ici (exemple)
-                console.log("Charger les liens réels...");
-            }
-        },
-    };
-</script>
-
 <template>
     <nav>
         <!-- Logo à gauche -->
@@ -32,8 +9,33 @@
             <li><router-link to="/products">Produits</router-link></li>
             <li><router-link to="/profile">Profil</router-link></li>
         </ul>
+
+        <!-- Accès au panier -->
+        <div class="navbar-cart">
+            <router-link to="/cart" class="cart-link">
+                ?? Panier <span v-if="cartCount">({{ cartCount }})</span>
+            </router-link>
+        </div>
     </nav>
 </template>
+
+<script>
+    import { computed } from "vue";
+    import { useStore } from "vuex";
+
+    export default {
+        name: "Navbar",
+        setup() {
+            // Utilisation du store Vuex
+            const store = useStore();
+            const cartCount = computed(() => store.getters.cartCount); // Nombre d'articles dans le panier
+
+            return {
+                cartCount,
+            };
+        },
+    };
+</script>
 
 <style scoped>
     /* Style de la navbar */
@@ -76,11 +78,20 @@
                 color: #8B0000; /* Rouge foncé au survol */
             }
 
-    /* Style pour le fond global de la page */
-    body {
-        background-color: #F5F5F5; /* Couleur de fond de la page */
-        margin: 0;
-        font-family: 'Arial', sans-serif;
+    /* Style du panier */
+    .navbar-cart {
+        font-size: 18px;
+        font-weight: bold;
     }
 
+    .cart-link {
+        color: #000;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+        .cart-link:hover {
+            color: #ffc107; /* Jaune doré au survol */
+        }
 </style>

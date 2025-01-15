@@ -183,11 +183,8 @@
                 
             },
             addToCart(product) {
-                axios.post("/api/cart", {
-                    userId: 1,
-                    itemId: product.id,
-                    quantity: 1,
-                });
+                this.$store.dispatch("addToCart", product); // Ajouter au panier via Vuex
+                this.$router.push("/cart"); // Rediriger vers la page du panier
                 alert(`${product.name} ajouté au panier !`);
             },
         },
