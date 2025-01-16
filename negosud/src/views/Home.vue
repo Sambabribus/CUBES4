@@ -7,6 +7,7 @@
                 <h3>{{ product?.name }}</h3>
                 <p><strong>Prix :</strong> {{ product?.selling_price || 'N/A' }} &euro; TTC</p>
                 <p>{{ product?.description || 'Pas de description disponible.' }}</p>
+                <p><strong>Millésime :</strong> {{ product.millesime || 'N/A' }}</p>
                 <button @click="addToCart(product)">Ajouter au panier</button>
             </div>
 
@@ -35,11 +36,15 @@
         <section class="available-products">
             <aside class="filters">
                 <h3>Filtres</h3>
+
                 <div class="filter-group">
-                    <h4>Catégories de vins</h4>
-                    <label><input type="checkbox" v-model="filters.colors" value="Vin rouge" /> Vin rouge</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Vin blanc" /> Vin blanc sec</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Vin rose" /> Vin rosé</label>
+                    <h4>Millésime</h4>
+                    <select v-model="filters.millesime">
+                        <option value="">Tous les millésimes</option> <!-- Par défaut -->
+                        <option v-for="millesime in millesimes" :key="millesime" :value="millesime">
+                            {{ millesime || 'N/A' }}
+                        </option>
+                    </select>
                 </div>
 
                 <div class="filter-group">
@@ -76,11 +81,10 @@
                     <div class="card" v-for="product in filteredProducts" :key="product.Id_items">
                         <h3>{{ product?.name }}</h3>
                         <p><strong>Prix :</strong> {{ product?.selling_price || 'N/A' }} &euro; TTC</p>
+                        <p><strong>Millésime :</strong> {{ product?.millesime || 'N/A' }}</p>
                         <p>{{ product?.description || 'Pas de description disponible.' }}</p>
-
                         <button @click="addToCart(product)">Ajouter au panier</button>
                     </div>
-
                 </div>
             </main>
         </section>
@@ -98,9 +102,10 @@
                 showFilters: false, // Variable pour gérer la visibilité des filtres
                 products: [],
                 suppliers: [],
+                millesimes: [], 
                 filters: {
-                    colors: [],
                     supplier: "",
+                    millesimes: "",
                     minPrice: "",
                     maxPrice: "",
                 },
@@ -108,28 +113,25 @@
         },
         computed: {
             filteredProducts() {
-                const normalize = (str) => str?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-
                 return this.products.filter((product) => {
-                    const matchesColor =
-                        this.filters.colors.length === 0 ||
-                        this.filters.colors.some((filterCategory) =>
-                            normalize(filterCategory) === normalize(product.alcohol_type)
-                        );
+                    // Vérifie si le produit correspond au millésime sélectionné
+                    const matchesMillesime =
+                        !this.filters.millesime || product.millesime === this.filters.millesime;
 
+                    // Vérifie si le produit correspond au fournisseur sélectionné
                     const matchesSupplier =
                         !this.filters.supplier || product.domain_name === this.filters.supplier;
 
+                    // Vérifie si le produit correspond à la plage de prix sélectionnée
                     const matchesPrice =
                         (!this.filters.minPrice || product.selling_price >= this.filters.minPrice) &&
                         (!this.filters.maxPrice || product.selling_price <= this.filters.maxPrice);
 
-                    return matchesColor && matchesSupplier && matchesPrice;
+                    // Retourne les produits correspondant à tous les critères
+                    return matchesMillesime && matchesSupplier && matchesPrice;
                 });
             }
-
-        },
-        
+        }, 
         methods: {
             async fetchTopProducts() {
                 const response = await axios.get("/api/items"); // Récupère tous les produits
@@ -139,9 +141,15 @@
                 this.topProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
             },
             async fetchProducts() {
-                const response = await axios.get("/api/items");
-                this.products = response.data;
-                console.log("Produits récupérés :", this.products); // Vérification
+                try {
+                    const response = await axios.get("/api/items");
+                    this.products = response.data;
+
+                    // Vérifiez les données récupérées
+                    console.log("Produits récupérés :", this.products);
+                } catch (error) {
+                    console.error("Erreur lors de la récupération des produits :", error);
+                }
             },
             async fetchSuppliers() {
                 try {
@@ -164,6 +172,24 @@
                     console.error("Erreur lors de la récupération des fournisseurs :", error);
                 }
             },
+            async fetchMillesimes() {
+                try {
+                    const response = await axios.get("/api/items"); // Récupérer tous les produits
+                    const allProducts = response.data;
+
+                    // Extraire les millésimes uniques
+                    const uniqueMillesiimes = [
+                        ...new Set(allProducts.map((product) => product.millesime))
+                    ];
+
+                    // Trier les millésimes par ordre décroissant
+                    this.millesimes = uniqueMillesiimes.sort((a, b) => b - a);
+
+                    console.log("Millésimes récupérés :", this.millesimes); // Vérification
+                } catch (error) {
+                    console.error("Erreur lors de la récupération des millésimes :", error);
+                }
+            },
             validatePrice(field) {
                 if (this.filters[field] < 0) {
                     this.filters[field] = 0; // Remet à zéro si négatif
@@ -183,6 +209,7 @@
                 await this.fetchProducts();
                 await this.fetchTopProducts();
                 await this.fetchSuppliers();
+                await this.fetchMillesimes(); 
                 console.log("Produits chargés :", this.products); // Vérification des produits
             } catch (error) {
                 console.error("Erreur lors du chargement des produits :", error);
