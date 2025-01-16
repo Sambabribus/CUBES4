@@ -12,7 +12,7 @@
             </div>
 
         </section>
-
+        <!-- A propos -->
         <section class="about">
             <h2>À propos</h2>
             <div class="about-container">
@@ -32,7 +32,7 @@
         </section>
 
 
-        <!-- Section Produits Disponibles avec filtres -->
+        <!-- Section Affichage des filtres -->
         <section class="available-products">
             <aside class="filters">
                 <h3>Filtres</h3>
@@ -74,7 +74,7 @@
 
                 </div>
             </aside>
-
+            <!-- Section Produits Disponibles -->
             <main class="products">
                 <h2>Produits Disponibles</h2>
                 <div class="product-grid">
@@ -98,20 +98,22 @@
         name: "Home",
         data() {
             return {
-                topProducts: [],
+                topProducts: [], // affichage Meillieur vente cout de coeur
                 showFilters: false, // Variable pour gérer la visibilité des filtres
-                products: [],
-                suppliers: [],
-                millesimes: [], 
+                products: [], //affichage produit
+                suppliers: [], // affichage Fournisseur Domaine
+                millesimes: [], // affichage millesime
                 filters: {
-                    supplier: "",
-                    millesimes: "",
-                    minPrice: "",
-                    maxPrice: "",
+                    supplier: "", // Filtre pour le fournisseur
+                    millesimes: "", // Filtre pour les millesime
+                    minPrice: "", // filtre pour affichage part rapport au prix minimun
+                    maxPrice: "", // filtre pour affichage part rapport au prix maximun
                 },
             };
         },
+
         computed: {
+            // Règle des filtres dans l'encadré permettant l'affichage avec un ou plusieurs filtres
             filteredProducts() {
                 return this.products.filter((product) => {
                     // Vérifie si le produit correspond au millésime sélectionné
@@ -133,6 +135,7 @@
             }
         }, 
         methods: {
+            // Affichage des meillieur ventes
             async fetchTopProducts() {
                 const response = await axios.get("/api/items"); // Récupère tous les produits
                 const allProducts = response.data;
@@ -140,6 +143,7 @@
                 // Choisir aléatoirement 3 produits
                 this.topProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
             },
+            // Affichage de tout les produits
             async fetchProducts() {
                 try {
                     const response = await axios.get("/api/items");
@@ -151,6 +155,7 @@
                     console.error("Erreur lors de la récupération des produits :", error);
                 }
             },
+            // Récupère les fournisseurs part nom dans l'items
             async fetchSuppliers() {
                 try {
                     const response = await axios.get("/api/items"); // Récupère tous les produits
@@ -172,6 +177,7 @@
                     console.error("Erreur lors de la récupération des fournisseurs :", error);
                 }
             },
+            // Récupère les milesimes dans l'items
             async fetchMillesimes() {
                 try {
                     const response = await axios.get("/api/items"); // Récupérer tous les produits
@@ -190,6 +196,7 @@
                     console.error("Erreur lors de la récupération des millésimes :", error);
                 }
             },
+            // Permet de filtré par prix des produits
             validatePrice(field) {
                 if (this.filters[field] < 0) {
                     this.filters[field] = 0; // Remet à zéro si négatif
@@ -198,18 +205,20 @@
             applyFilters() {
                 
             },
+            // Selection le produit et l'envoit dans le panier
             addToCart(product) {
                 this.$store.dispatch("addToCart", product); // Ajouter au panier via Vuex
                 this.$router.push("/cart"); // Rediriger vers la page du panier
                 alert(`${product.name} ajouté au panier !`);
             },
         },
+        // Execution automatique des composants
         async mounted() {
             try {
-                await this.fetchProducts();
-                await this.fetchTopProducts();
-                await this.fetchSuppliers();
-                await this.fetchMillesimes(); 
+                await this.fetchProducts(); // tout les produits
+                await this.fetchTopProducts(); //Meillieur vente
+                await this.fetchSuppliers(); // Fournisseur
+                await this.fetchMillesimes(); // Millesimes
                 console.log("Produits chargés :", this.products); // Vérification des produits
             } catch (error) {
                 console.error("Erreur lors du chargement des produits :", error);
@@ -217,6 +226,8 @@
         }
     };
 </script>
+
+
 <style scoped>
     /* Conteneur principal */
     .home-page {
@@ -244,6 +255,8 @@
         gap: 20px;
         margin: 0 auto;
     }
+
+
     /* Section À propos */
     .about {
         display: flex;
