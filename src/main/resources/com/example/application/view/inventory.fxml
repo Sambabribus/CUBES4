@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.application.controller.InventoryController"
+      spacing="10">
+
+    <Button text="Retour" onAction="#handleBack" />
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Titre de la vue -->
+    <Label text="Gestion de l'Inventaire" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <!-- TableView des articles -->
+    <TableView fx:id="tableView" prefHeight="400" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="ID" fx:id="idColumn" prefWidth="50"/>
+            <TableColumn text="Nom" fx:id="nameColumn" prefWidth="150"/>
+            <TableColumn text="Type d'alcool" fx:id="typeColumn" prefWidth="120"/>
+            <TableColumn text="Domaine" fx:id="domainColumn" prefWidth="150"/>
+            <TableColumn text="Quantité" fx:id="quantityColumn" prefWidth="80"/>
+            <TableColumn text="Prix d'achat" fx:id="purchasePriceColumn" prefWidth="100"/>
+            <TableColumn text="Prix de vente" fx:id="sellingPriceColumn" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+    <!-- Boutons d'actions -->
+    <HBox alignment="CENTER" spacing="10">
+        <Button text="Enregistrer les modifications" onAction="#handleSave" style="-fx-font-size: 14px; -fx-padding: 10px;"/>
+        <Button text="Supprimer l'article sélectionné" onAction="#handleDelete" style="-fx-font-size: 14px; -fx-padding: 10px; -fx-background-color: #D9534F; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>
