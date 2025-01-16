@@ -27,8 +27,8 @@ export const getUserOrders = async (token) => {
 // Récupérer tous les produits
 export const getProducts = async () => {
     try {
-        const response = await apiClient.get('/items');
-        console.log("Produits récupérés :", this.products);// Appel relatif
+        const response = await apiClient.get('/items'); // Appel relatif
+
         return response.data; // Retourne les produits
     } catch (error) {
         console.error("Erreur lors de la récupération des produits :", error);
