@@ -38,16 +38,9 @@
                 <div class="filter-group">
                     <h4>Catégories de vins</h4>
                     <label><input type="checkbox" v-model="filters.colors" value="Vin rouge" /> Vin rouge</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Vin blanc sec" /> Vin blanc sec</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Vin blanc doux" /> Vin blanc doux</label>
+                    <label><input type="checkbox" v-model="filters.colors" value="Vin blanc" /> Vin blanc sec</label>
                     <label><input type="checkbox" v-model="filters.colors" value="Vin rose" /> Vin rosé</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Floc de Gascogne" /> Floc de Gascogne</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Vin blanc moelleux" /> Vin blanc moelleux</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Vin blanc fruite" /> Vin blanc fruité</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Madiran" /> Madiran</label>
-                    <label><input type="checkbox" v-model="filters.colors" value="Armagnac" /> Armagnac</label>
                 </div>
-
 
                 <div class="filter-group">
                     <h4>Fournisseur</h4>
@@ -115,32 +108,26 @@
         },
         computed: {
             filteredProducts() {
-                // Fonction de normalisation
-                const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                const normalize = (str) => str?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
                 return this.products.filter((product) => {
-                    const alcoholType = product.alcohol_type || ""; // Vérifie que le type d'alcool est défini
-
-                    // Normalisation des chaînes avant comparaison
                     const matchesColor =
                         this.filters.colors.length === 0 ||
                         this.filters.colors.some((filterCategory) =>
-                            normalize(filterCategory) === normalize(alcoholType)
+                            normalize(filterCategory) === normalize(product.alcohol_type)
                         );
 
-                    // Vérifie la correspondance des fournisseurs
                     const matchesSupplier =
                         !this.filters.supplier || product.domain_name === this.filters.supplier;
 
-                    // Vérifie la correspondance des prix
                     const matchesPrice =
                         (!this.filters.minPrice || product.selling_price >= this.filters.minPrice) &&
                         (!this.filters.maxPrice || product.selling_price <= this.filters.maxPrice);
 
-                    // Retourne les produits correspondant à tous les critères
                     return matchesColor && matchesSupplier && matchesPrice;
                 });
-            },
+            }
+
         },
         
         methods: {
@@ -168,9 +155,11 @@
 
                     // Stocker les fournisseurs sous forme d'objets { id, name }
                     this.suppliers = uniqueSuppliers.map((supplier, index) => ({
-                        id: index + 1, // Générer un ID fictif
+                        id: index + 1, // Générer un ID unique fictif
                         name: supplier,
                     }));
+
+                    console.log("Fournisseurs récupérés :", this.suppliers); // Vérifiez dans la console
                 } catch (error) {
                     console.error("Erreur lors de la récupération des fournisseurs :", error);
                 }
@@ -193,6 +182,7 @@
             try {
                 await this.fetchProducts();
                 await this.fetchTopProducts();
+                await this.fetchSuppliers();
                 console.log("Produits chargés :", this.products); // Vérification des produits
             } catch (error) {
                 console.error("Erreur lors du chargement des produits :", error);
