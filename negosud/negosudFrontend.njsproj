@@ -66,10 +66,6 @@
     <Content Include="src\services\api.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="src\services\mockData.js">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="src\services\newFile.js" />
     <Content Include="src\store\index.js">
       <SubType>Code</SubType>
     </Content>
@@ -91,7 +87,7 @@
     <Content Include="src\views\ProductPage.vue">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="src\views\Profile.vue">
+    <Content Include="src\views\Signup.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="vue.config.js">

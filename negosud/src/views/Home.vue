@@ -3,14 +3,13 @@
         <!-- Section des Meilleures Ventes -->
         <section class="best-sellers">
             <h2>Nos Meilleures Ventes</h2>
-            <div class="top-products">
-                <div class="card" v-for="product in topProducts" :key="product.id">
-                    <h3>{{ product.name }}</h3>
-                    <p><strong>Prix :</strong> {{ product.selling_price }} &euro; TTC</p>
-                    <p>{{ product.description }}</p>
-                    <button @click="addToCart(product)">Ajouter au panier</button>
-                </div>
+            <div class="card" v-for="product in topProducts" :key="product.Id_items">
+                <h3>{{ product?.name }}</h3>
+                <p><strong>Prix :</strong> {{ product?.selling_price || 'N/A' }} &euro; TTC</p>
+                <p>{{ product?.description || 'Pas de description disponible.' }}</p>
+                <button @click="addToCart(product)">Ajouter au panier</button>
             </div>
+
         </section>
 
         <section class="about">
@@ -81,12 +80,14 @@
             <main class="products">
                 <h2>Produits Disponibles</h2>
                 <div class="product-grid">
-                    <div class="card" v-for="product in filteredProducts" :key="product.id">
-                        <h3>{{ product.name }}</h3>
-                        <p><strong>Prix :</strong> {{ product.selling_price }} &euro; TTC</p>
-                        <p>{{ product.description }}</p>
+                    <div class="card" v-for="product in filteredProducts" :key="product.Id_items">
+                        <h3>{{ product?.name }}</h3>
+                        <p><strong>Prix :</strong> {{ product?.selling_price || 'N/A' }} &euro; TTC</p>
+                        <p>{{ product?.description || 'Pas de description disponible.' }}</p>
+
                         <button @click="addToCart(product)">Ajouter au panier</button>
                     </div>
+
                 </div>
             </main>
         </section>
@@ -189,10 +190,14 @@
             },
         },
         async mounted() {
-            await this.fetchTopProducts();
-            await this.fetchProducts();
-            await this.fetchSuppliers();
-        },
+            try {
+                await this.fetchProducts();
+                await this.fetchTopProducts();
+                console.log("Produits chargés :", this.products); // Vérification des produits
+            } catch (error) {
+                console.error("Erreur lors du chargement des produits :", error);
+            }
+        }
     };
 </script>
 <style scoped>

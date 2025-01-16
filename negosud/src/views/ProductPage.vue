@@ -22,7 +22,6 @@
 
 
 <script>
-    import { mockProducts } from "@/services/mockData";
     import { mapActions } from "vuex";
 
     export default {

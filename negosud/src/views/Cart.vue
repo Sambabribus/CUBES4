@@ -3,8 +3,7 @@
         <h1>Mon Panier</h1>
         <!-- Vérifie si le panier contient des articles -->
         <div v-if="cartItems.length > 0">
-          
-            <div class="cart-item" v-for="item in cartItems" :key="item.id">
+            <div class="cart-item" v-for="item in cartItems" :key="item.Id_items">
                 <h3>{{ item.name }}</h3>
                 <p>Prix unitaire : {{ parseFloat(item.selling_price || 0).toFixed(2) }} € TTC</p>
                 <p>Sous-total : {{ (parseFloat(item.selling_price || 0) * item.quantity).toFixed(2) }} € TTC</p>
@@ -13,12 +12,11 @@
                     <span>{{ item.quantity }}</span>
                     <button @click="updateQuantity({ productId: item.Id_items, newQuantity: item.quantity + 1 })">+</button>
                 </div>
-                <!-- Bouton pour retirer l'article -->
                 <button @click="removeFromCart(item.Id_items)" class="remove-btn">Retirer</button>
             </div>
             <!-- Total général -->
             <h2>Total : {{ cartTotalPrice.toFixed(2) }} € TTC</h2>
-            <button class="checkout-btn">Valider ma commande</button>
+            <button class="checkout-btn" @click="goToCheckout">Valider ma commande</button>
         </div>
         <div v-else>
             <p>Votre panier est vide.</p>
@@ -26,32 +24,33 @@
     </div>
 </template>
 
-
 <script>
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapGetters, mapActions } from "vuex";
 
     export default {
         computed: {
-            ...mapGetters(['cartItems', 'cartTotalPrice']), // Récupère les articles et le total
+            ...mapGetters(["cartItems", "cartTotalPrice", "isAuthenticated"]), // Récupère les articles, le total et l'état d'authentification
         },
         methods: {
-            addToCart(product) {
-                this.$store.dispatch('addToCart', {
-                    id: product.id,
-                    name: product.name,
-                    selling_price: product.selling_price,
-                    quantity: 1,
-                    size: product.size || 'default',  // Ajoutez des champs uniques
-                    color: product.color || 'default',
-                });
-            },
-            ...mapActions(['removeFromCart']), // Assurez-vous que removeFromCart est bien mappée
-            ...mapActions(['updateQuantity']), // Assurez-vous que `updateQuantity` est inclus ici
-            removeItem(productId) {
-                this.removeFromCart(productId);
+            ...mapActions(["updateQuantity", "removeFromCart", "addToCart"]), // Actions Vuex existantes
+            goToCheckout() {
+                // Vérifie si l'utilisateur est connecté
+                if (!this.isAuthenticated) {
+                    alert("Veuillez vous connecter pour valider votre commande.");
+                    this.$router.push("/login"); // Redirige vers la page de connexion
+                    return;
+                }
+
+                // Vérifie si le panier est vide
+                if (this.cartItems.length === 0) {
+                    alert("Votre panier est vide.");
+                    return;
+                }
+
+                // Redirige vers la page de validation de commande
+                this.$router.push("/checkout");
             },
         },
-
     };
 </script>
 
@@ -105,7 +104,7 @@
         }
 
     .checkout-btn {
-        background-color: #28a745;
+        background-color: #710101;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -114,6 +113,6 @@
     }
 
         .checkout-btn:hover {
-            background-color: #218838;
+            background-color: #a71d2a;
         }
 </style>
