@@ -4,14 +4,17 @@ const express = require('express');
 const mysql = require('mysql2');
 const swaggerUi = require('swagger-ui-express'); // Import Swagger UI
 const swaggerDocs = require('./swaggerConfig'); // Chemin vers la configuration Swagger
+
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
 
 // Instantation d'un objet Express qui va contenir le serveur
 const app = express();
 
 // port d'écoute
 const port = 3000;
+
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')
@@ -29,6 +32,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Méthodes HTTP autorisées
     credentials: true
 }));
+
 
 
 // Importation des routes utilisateurs
