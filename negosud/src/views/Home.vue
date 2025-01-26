@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    import axios from "axios";
+import apiClient from "@/services/api";
 
     export default {
         name: "Home",
@@ -137,7 +137,7 @@
         methods: {
             // Affichage des meillieur ventes
             async fetchTopProducts() {
-                const response = await axios.get("/api/items"); // Récupère tous les produits
+                const response = await apiClient.get("/items"); // Récupère tous les produits
                 const allProducts = response.data;
 
                 // Choisir aléatoirement 3 produits
@@ -146,7 +146,7 @@
             // Affichage de tout les produits
             async fetchProducts() {
                 try {
-                    const response = await axios.get("/api/items");
+                    const response = await apiClient.get("/items");
                     this.products = response.data;
 
                     // Vérifiez les données récupérées
@@ -158,7 +158,7 @@
             // Récupère les fournisseurs part nom dans l'items
             async fetchSuppliers() {
                 try {
-                    const response = await axios.get("/api/items"); // Récupère tous les produits
+                    const response = await apiClient.get("/items"); // Récupère tous les produits
                     const allProducts = response.data;
 
                     // Extraire les valeurs uniques de `domain_name`
@@ -180,7 +180,7 @@
             // Récupère les milesimes dans l'items
             async fetchMillesimes() {
                 try {
-                    const response = await axios.get("/api/items"); // Récupérer tous les produits
+                    const response = await apiClient.get("/items"); // Récupérer tous les produits
                     const allProducts = response.data;
 
                     // Extraire les millésimes uniques

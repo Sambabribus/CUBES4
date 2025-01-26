@@ -10,6 +10,11 @@
             <li><router-link to="/profile">Profil</router-link></li>
         </ul>
 
+        <!-- Bouton Connexion/Déconnexion -->
+        <button @click="handleAuthAction">
+            {{ isAuthenticated ? 'Déconnexion' : 'Connexion' }}
+        </button>
+
         <!-- Accès au panier -->
         <div class="navbar-cart">
             <router-link to="/cart" class="cart-link">
@@ -22,16 +27,40 @@
 <script>
     import { computed } from "vue";
     import { useStore } from "vuex";
+    import { useRouter } from "vue-router";
 
     export default {
         name: "Navbar",
         setup() {
-            // Utilisation du store Vuex
             const store = useStore();
-            const cartCount = computed(() => store.getters.cartCount); // Nombre d'articles dans le panier
+            const router = useRouter();
+
+            // Vérifier l'état de connexion
+            const isAuthenticated = computed(() => {
+                const authState = store.getters.isAuthenticated;
+                console.log("Navbar - État de connexion :", authState);
+                return authState;
+            });
+
+            // Calculer le nombre d'articles dans le panier
+            const cartCount = computed(() => store.getters.cartCount);
+
+            // Gérer le clic sur Connexion/Déconnexion
+            const handleAuthAction = () => {
+                if (isAuthenticated.value) {
+                    console.log("Déconnexion via Navbar");
+                    store.dispatch("logout");
+                    router.push("/");
+                } else {
+                    console.log("Redirection vers /login via Navbar");
+                    router.push("/login");
+                }
+            };
 
             return {
+                isAuthenticated,
                 cartCount,
+                handleAuthAction,
             };
         },
     };
@@ -93,5 +122,18 @@
 
         .cart-link:hover {
             color: #ffc107; /* Jaune doré au survol */
+        }
+
+    .navbar button {
+        background-color: #710101;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .navbar button:hover {
+            background-color: #a71d2a;
         }
 </style>

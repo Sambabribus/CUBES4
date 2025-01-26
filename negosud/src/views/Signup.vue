@@ -45,15 +45,12 @@
 
 <script>
     import { ref } from "vue";
-    import { useStore } from "vuex";
     import { useRouter } from "vue-router";
+    import { signupUser } from "../services/api"; // Import de l'API
 
     export default {
         setup() {
-            const store = useStore();
             const router = useRouter();
-
-            // Données du formulaire
             const formData = ref({
                 mail: "",
                 phone_number: "",
@@ -67,12 +64,13 @@
             });
 
             const signup = async () => {
-                const success = await store.dispatch("signup", formData.value);
-                if (success) {
+                try {
+                    const response = await signupUser(formData.value); // Appel API
                     alert("Compte créé avec succès !");
-                    router.push("/login");
-                } else {
-                    alert("Une erreur s'est produite. Veuillez réessayer.");
+                    router.push("/login"); // Redirection
+                } catch (error) {
+                    alert(error.response?.data?.message || "Une erreur s'est produite.");
+                    console.error("Erreur lors de l'inscription :", error);
                 }
             };
 
@@ -82,6 +80,7 @@
             };
         },
     };
+
 </script>
 
 <style scoped>

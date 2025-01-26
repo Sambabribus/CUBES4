@@ -5,77 +5,91 @@
         <!-- Récapitulatif des articles -->
         <div v-if="cartItems.length > 0">
             <h2>Votre panier</h2>
-            <div v-for="item in cartItems" :key="item.id" class="cart-item">
+            <div v-for="item in cartItems" :key="item.Id_items" class="cart-item">
                 <h3>{{ item.name }}</h3>
                 <p>Prix : {{ item.selling_price }} &euro; TTC</p>
                 <p>Quantité : {{ item.quantity }}</p>
-                <p>Sous-total : {{ item.selling_price * item.quantity }} &euro;</p>
+                <p>Sous-total : {{ (item.selling_price * item.quantity).toFixed(2) }} &euro;</p>
             </div>
+            <button @click="submitOrder" class="submit-button">Valider la commande</button>
         </div>
         <div v-else>
             <p>Votre panier est vide.</p>
-        </div>
-
-        <!-- Formulaire d'informations -->
-        <div class="checkout-form" v-if="cartItems.length > 0">
-            <h2>Informations de livraison</h2>
-            <form @submit.prevent="submitOrder">
-                <label for="name">Nom complet :</label>
-                <input type="text" id="name" v-model="customer.name" required />
-
-                <label for="address">Adresse :</label>
-                <input type="text" id="address" v-model="customer.address" required />
-
-                <label for="payment">Mode de paiement :</label>
-                <select id="payment" v-model="customer.paymentMethod">
-                    <option value="credit-card">Carte bancaire</option>
-                    <option value="paypal">PayPal</option>
-                </select>
-
-                <button type="submit">Valider la commande</button>
-            </form>
         </div>
     </div>
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
+    import { computed } from "vue";
+    import { useStore } from "vuex";
+    import apiClient from "../services/api"; // Import de l'API client
 
-export default {
-    name: "Checkout",
-    setup() {
-        const store = useStore();
+   export default {
+        name: "Checkout",
+            setup() {
+            const store = useStore();
+            const cartItems = computed(() => store.state.cart || []);
+            const user = computed(() => store.state.user); // Récupérer l'utilisateur connecté
+                
 
-        const cartItems = computed(() => store.state.cart || []); // Articles du panier
-        const customer = {
-            name: "",
-            address: "",
-            paymentMethod: "credit-card", // Mode de paiement par défaut
-        };
+                const submitOrder = async () => {
+                    try {
+                        if (!cartItems.value.length) {
+                            alert("Votre panier est vide.");
+                            return;
+                        }
 
-        const submitOrder = () => {
-            if (!cartItems.value.length) {
-                alert("Votre panier est vide.");
-                return;
-            }
+                        if (!user.value || !user.value.id_users) {
+                            console.log("Utilisateur connecté :", user.value);
+                            alert("Vous devez être connecté pour valider une commande.");
+                            return;
+                        }
 
-            // Logique pour valider la commande
-            console.log("Commande soumise :", {
-                cart: cartItems.value,
-                customer,
-            });
-            alert("Merci pour votre commande !");
-        };
+                        // Convertir la date au format compatible MySQL
+                        const formatDateForMySQL = (date) => {
+                            const d = new Date(date);
+                            const year = d.getFullYear();
+                            const month = String(d.getMonth() + 1).padStart(2, "0");
+                            const day = String(d.getDate()).padStart(2, "0");
+                            const hours = String(d.getHours()).padStart(2, "0");
+                            const minutes = String(d.getMinutes()).padStart(2, "0");
+                            const seconds = String(d.getSeconds()).padStart(2, "0");
+                            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                        };
 
-        return {
-            cartItems,
-            customer,
-            submitOrder,
-        };
-    },
-};
+                        const orderDate = formatDateForMySQL(new Date());
+
+
+                        // Préparer les données
+                        const payload = {
+                            cartItems: cartItems.value,
+                            Id_users: user.value.id_users || user.value.id, // ID utilisateur connecté
+                            order_date: orderDate,// Ajouter la date de commande
+                        };
+
+                        console.log("Payload envoyé :", payload); // Log pour vérifier les données avant l'envoi
+
+                        // Envoyer les données au backend
+                        const response = await apiClient.post("/orders", payload);
+                        console.log("Commande validée :", response.data);
+
+                        alert("Votre commande a été enregistrée !");
+                        store.dispatch("clearCart"); // Vider le panier après validation
+                    } catch (error) {
+                        console.error("Erreur lors de la validation de la commande :", error.response?.data || error.message);
+                        alert("Erreur lors de la validation de votre commande.");
+                    }
+                };
+
+            return {
+                cartItems,
+                submitOrder,
+            };
+        },
+    };
 </script>
+
+
 
 <style scoped>
     .checkout-page {
@@ -119,6 +133,19 @@ export default {
     }
 
         form button:hover {
+            background-color: #a20404;
+        }
+
+    .submit-button {
+        background-color: #8B0000;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+        .submit-button:hover {
             background-color: #a20404;
         }
 </style>

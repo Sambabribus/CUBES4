@@ -90,6 +90,9 @@
     <Content Include="src\views\Signup.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\views\UserProfile.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="vue.config.js">
       <SubType>Code</SubType>
     </Content>

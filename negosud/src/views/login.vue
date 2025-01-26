@@ -2,14 +2,17 @@
     <div class="login-page">
         <h1>Connexion</h1>
         <form @submit.prevent="login">
-            <label for="email">Email :</label>
-            <input type="email" id="email" v-model="email" required />
+            <label for="username">Nom d'utilisateur :</label>
+            <input type="text" id="username" v-model="username" required />
+
 
             <label for="password">Mot de passe :</label>
             <input type="password" id="password" v-model="password" required />
 
             <button type="submit">Se connecter</button>
         </form>
+
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
         <p>
             Pas encore de compte ?
@@ -19,36 +22,57 @@
 </template>
 
 <script>
-    import { ref } from "vue"; // Importez `ref` pour créer des propriétés réactives
-    import { useStore } from "vuex"; // Utilisez le store Vuex
-    import { useRouter } from "vue-router"; // Utilisez Vue Router pour la navigation
+    import { ref } from "vue";
+    import { useStore } from "vuex";
+    import { useRouter } from "vue-router";
 
     export default {
         setup() {
-            const store = useStore(); // Accès au store Vuex
-            const router = useRouter(); // Accès au routeur Vue
+            const store = useStore();
+            const router = useRouter();
 
-            const email = ref(""); // Déclarez l'email comme une propriété réactive
-            const password = ref(""); // Déclarez le mot de passe comme une propriété réactive
+            const username = ref(""); // Email réactif
+            const password = ref(""); // Mot de passe réactif
+            const errorMessage = ref(""); // Message d'erreur réactif
 
             const login = async () => {
-                const success = await store.dispatch("login", {
-                    email: email.value,
-                    password: password.value,
-                });
-                if (success) {
-                    alert("Connexion réussie !");
-                    const redirectTo = router.currentRoute.value.query.redirect || "/"; // Redirige vers la destination ou la page d'accueil
-                    router.push(redirectTo);
-                } else {
-                    alert("Identifiants incorrects. Veuillez réessayer.");
-                }
+                try {
+                    console.log("Tentative d'appel à store.dispatch('login')");
+                    const success = await store.dispatch("login", {
+                        username: username.value,
+                        password: password.value,
+                    });
+                    console.log(success);
+
+                    if (success) {
+                        alert("Connexion réussie !");
+                        const redirectTo = router.currentRoute.value.query.redirect || "/";
+                        router.push(redirectTo);
+                    } else {
+                        console.error("Connexion échouée.");
+                        errorMessage.value = "Erreur de connexion. Veuillez réessayer.";
+                    }
+                 }catch (error) {
+                    console.error("Erreur capturée :", error.response?.data || error.message);
+                    errorMessage.value = error.response?.data?.message || "Une erreur est survenue.";
+                //}
+              //  catch (error) {
+                // Gerer les erreurs du backend
+                if (error.response?.status === 404) {
+                    errorMessage.value = "Utilisateur introuvable.";
+                } else if (error.response?.status === 401) {
+               errorMessage.value = "Mot de passe incorrect.";
+              } else {
+                errorMessage.value = "Une erreur est survenue. Veuillez réessayer.";
+                 }
+          }
             };
 
             return {
-                email,
+                username,
                 password,
-                login, // Exposez la méthode `login` pour le template
+                errorMessage,
+                login,
             };
         },
     };
@@ -93,4 +117,10 @@
             form button:hover {
                 background-color: #a71d2a;
             }
+
+    .error {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+    }
 </style>

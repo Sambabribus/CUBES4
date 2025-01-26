@@ -1,46 +1,46 @@
-import { createStore } from 'vuex';
+import apiClient from "@/services/api";
+import { createStore } from "vuex";
 import { signupUser } from "../services/api";
 
 const store = createStore({
     state: {
         cart: [], // Tableau contenant les articles du panier
-        user: null, // Stocke l'utilisateur connecté
+        user: null, // Contient les informations utilisateur (id_users, username, isAdmin)
+        token: null, // Contient le token JWT
     },
     getters: {
         cartItems: (state) => state.cart,
         cartTotalPrice: (state) =>
             state.cart.reduce(
-                (total, item) => total + parseFloat(item.selling_price || 0) * item.quantity,
+                (total, item) =>
+                    total + parseFloat(item.selling_price || 0) * item.quantity,
                 0
             ),
-        isAuthenticated: (state) => !!state.user, // Vérifie si l'utilisateur est connecté
+        isAuthenticated: (state) => !!state.token, // Vérifie si l'utilisateur est authentifié
+        userId: (state) => state.user?.id_users, // Récupère l'ID utilisateur
     },
     mutations: {
         ADD_TO_CART(state, product) {
-            // Recherche d'un article existant basé sur plusieurs critères
             const existingItem = state.cart.find(
-                item =>
+                (item) =>
                     item.Id_items === product.Id_items && // Vérifiez l'ID
                     item.name === product.name // Ajoutez d'autres critères si nécessaire
             );
 
             if (existingItem) {
-                // Si un article correspondant est trouvé, incrémentez la quantité
-                existingItem.quantity += product.quantity || 1;
+                existingItem.quantity += product.quantity || 1; // Si un article correspondant est trouvé, incrémentez la quantité
             } else {
-                // Si aucun article correspondant n'est trouvé, ajoutez un nouvel article
                 state.cart.push({
                     ...product,
                     quantity: product.quantity || 1,
-                });
+                }); // Sinon ajoutez l'article
             }
         },
         REMOVE_FROM_CART(state, productId) {
-            // Corrigez pour utiliser `Id_items` au lieu de `id`
-            state.cart = state.cart.filter((item) => item.Id_items !== product.Id_items);
+            state.cart = state.cart.filter((item) => item.Id_items !== productId);
         },
         UPDATE_QUANTITY(state, { productId, newQuantity }) {
-            const product = state.cart.find((item) => item.Id_items === product.Id_items);
+            const product = state.cart.find((item) => item.Id_items === productId);
             if (product) {
                 product.quantity = newQuantity > 0 ? newQuantity : 1; // Minimum 1
             }
@@ -48,52 +48,102 @@ const store = createStore({
         CLEAR_CART(state) {
             state.cart = []; // Vide le panier
         },
-        SET_USER(state, user) {
-            state.user = user;
+        SET_USER(state, { token, id_users, username, isAdmin }) {
+            state.user = { id_users, username, isAdmin }; // Stocke les informations utilisateur
+            state.token = token; // Stocke le token JWT
+
+            // Persiste les informations utilisateur
+            localStorage.setItem(
+                "user",
+                JSON.stringify({ id_users, username, isAdmin })
+            );
+            localStorage.setItem("token", token);
+        },
+        LOGOUT(state) {
+            state.user = null;
+            state.token = null;
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
         },
     },
     actions: {
         addToCart({ commit }, product) {
-            commit('ADD_TO_CART', product); // Ajoute un article au panier
+            commit("ADD_TO_CART", product); // Ajoute un article au panier
         },
         removeFromCart({ commit }, productId) {
-            commit('REMOVE_FROM_CART', productId); // Supprime un article
+            commit("REMOVE_FROM_CART", productId); // Supprime un article
         },
         updateQuantity({ commit }, payload) {
-            commit('UPDATE_QUANTITY', payload); // Met à jour la quantité
+            commit("UPDATE_QUANTITY", payload); // Met à jour la quantité
         },
         clearCart({ commit }) {
-            commit('CLEAR_CART'); // Vide le panier
+            commit("CLEAR_CART"); // Vide le panier
         },
-        async login({ commit }, { email, password }) {
-            // Remplacez ceci par une requête vers votre backend
-            if (email === "test@example.com" && password === "password123") {
-                commit("SET_USER", { email }); // Simule une connexion réussie
-                return true;
+        restoreUser({ commit }) {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("token");
+
+            if (user && token) {
+                commit("SET_USER", { ...user, token });
             }
-            return false;
+        },
+        async login({ commit }, { username, password }) {
+            console.log("Tentative de connexion avec :", { username, password }); // Vérifie les données envoyées
+
+            try {
+                console.log("Tentative de connexion avec :", { username, password }); // Vérifie les données envoyées
+                const response = await apiClient.post("/users/login", {
+                    username,
+                    password,
+                });
+
+                // Ajoute un log pour voir la réponse complète du backend
+                console.log("Réponse API login :", response.data);
+
+                const { token, id_users, isAdmin } = response.data;
+
+                // Stocke les informations utilisateur
+                commit("SET_USER", { token, id_users, username, isAdmin });
+
+                return true;
+            } catch (error) {
+                console.error(
+                    "Erreur de connexion :",
+                    error.response?.data || error.message
+                );
+                return false;
+            }
         },
         async signup({ commit }, userData) {
             try {
-                const response = await signupUser(userData); // Appel de la méthode dans api.js
-                console.log('Utilisateur créé avec succès :', response);
-                return true; // Succès
+                const response = await signupUser(userData);
+                console.log("Utilisateur créé avec succès :", response);
+                return true;
             } catch (error) {
-                console.error('Erreur lors de l\'inscription :', error.response?.data || error.message);
-                alert('Erreur lors de l\'inscription. Veuillez réessayer.');
-                return false; // Échec
+                console.error(
+                    "Erreur lors de l'inscription :",
+                    error.response?.data || error.message
+                );
+                alert("Erreur lors de l'inscription. Veuillez réessayer.");
+                return false;
             }
         },
-    },
-    methods: {
-        addToCart(product) {
-            this.$store.dispatch('addToCart', {
-                Id_items: product.Id_items,
-                name: product.name,
-                selling_price: product.selling_price,
-                quantity: 1,
-                // Ajoutez ici d'autres attributs uniques si nécessaire
-            });
+        logout({ commit }) {
+            console.log("Action LOGOUT");
+            commit("LOGOUT");
+        },
+        async placeOrder({ commit }, orderData) {
+            try {
+                const response = await apiClient.post("/orders", orderData);
+                console.log("Commande validée :", response.data);
+                return true;
+            } catch (error) {
+                console.error(
+                    "Erreur lors de l'envoi de la commande :",
+                    error.response?.data || error.message
+                );
+                return false;
+            }
         },
     },
 });

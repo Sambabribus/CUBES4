@@ -2,13 +2,22 @@ import axios from 'axios';
 
 const API_URL = process.env.VUE_APP_API_URL || 'http://localhost:3000/api';
 
-// Configuration du client Axios
+// Configuration du client apiClient
 const apiClient = axios.create({
     baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
+
+// Intercepteur pour inclure des en-têtes (si besoin)
+apiClient.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => Promise.reject(error));
 
 // Connexion utilisateur
 export const loginUser = async (email, password) => {
@@ -61,7 +70,7 @@ export const placeOrder = async (orderData) => {
 // Inscription utilisateur
 export const signupUser = async (userData) => {
     try {
-        const response = await apiClient.post('/users/signup', userData);
+        const response = await apiClient.post('/users', userData);
         return response.data; // Contient les infos de l'utilisateur créé
     } catch (error) {
         console.error('Erreur lors de l\'inscription :', error.response?.data || error.message);
