@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="com.example.application.controller.gestionStocks.create.suppliers.SuppliersController"
+      alignment="CENTER" prefHeight="500.0" prefWidth="600.0">
+
+    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Creation d'un nouveau fournisseur"/>
+
+    <VBox spacing="10" alignment="CENTER">
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Nom :"/>
+            <TextField fx:id="nameField" maxWidth="150"/>
+        </VBox>
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Email :"/>
+            <TextField fx:id="emailField" maxWidth="150"/>
+        </VBox>
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Téléphone :"/>
+            <TextField fx:id="phoneField" maxWidth="150"/>
+        </VBox>
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Addresse :"/>
+            <TextField fx:id="addressField" maxWidth="150"/>
+        </VBox>
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Region :"/>
+            <TextField fx:id="regionField" maxWidth="150"/>
+        </VBox>
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="alcohol_provided :"/>
+            <TextField fx:id="alcoolField" maxWidth="150"/>
+        </VBox>
+    </VBox>
+
+    <HBox spacing="30" alignment="CENTER">
+        <Button text="Créer" onAction="#handleCreateButton"/>
+    </HBox>
+</VBox>
