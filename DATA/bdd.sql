@@ -7,8 +7,11 @@ CREATE TABLE items(
    purchase_price DECIMAL(10,2)  ,
    selling_price DECIMAL(10,2)  ,
    stock_quantity INT,
+   threshold_min INT DEFAULT 10,
    description TEXT,
-   PRIMARY KEY(Id_items)
+   Id_suppliers INT NOT NULL,
+   PRIMARY KEY(Id_items),
+   FOREIGN KEY (Id_suppliers) REFERENCES suppliers(Id_suppliers);
 );
 
 CREATE TABLE users(
