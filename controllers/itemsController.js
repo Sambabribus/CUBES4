@@ -46,7 +46,7 @@ exports.updateItem = (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).send('Item non trouvé');
         }
-        res.status(200).send('Item mis à jour avec succès');
+        res.status(200).send(result);
     });
 };
 

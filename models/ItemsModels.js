@@ -74,40 +74,71 @@ const Items = {
     },
 
     sellUsers: (Id_items, quantity, Id_users, callback) => {
-        // Récupérer le stock et le prix de vente
-        db.query('SELECT stock_quantity, selling_price FROM items WHERE Id_items = ?', [Id_items], (err, result) => {
-            if (err) return callback(err);
+        // Récupérer le stock et le prix de vente de l'article
+        db.query(
+            'SELECT stock_quantity, selling_price FROM items WHERE Id_items = ?',
+            [Id_items],
+            (err, result) => {
+                const { stock_quantity, selling_price } = result[0];
+                const newStock = stock_quantity - quantity;
 
-            // Vérification du stock
-            const { stock_quantity, selling_price } = result[0];
-            if (stock_quantity < quantity) {
-                return callback(new Error('Stock insuffisant'));
+                // Mettre à jour le stock de l'article
+                db.query(
+                    'UPDATE items SET stock_quantity = ? WHERE Id_items = ?',
+                    [newStock, Id_items],
+                    (err) => {
+                        if (err) return callback(err);
+
+                        // Enregistrer la commande utilisateur
+                        db.query(
+                            'INSERT INTO orders (order_date, Id_users) VALUES (NOW(), ?)',
+                            [Id_users],
+                            (err, orderResult) => {
+                                if (err) return callback(err);
+
+                                const orderId = orderResult.insertId;
+
+                                db.query(
+                                    'INSERT INTO orders_users_details (quantity, price, Id_items, Id_orders) VALUES (?, ?, ?, ?)',
+                                    [quantity, selling_price, Id_items, orderId],
+                                    (err) => {
+                                        if (err) return callback(err);
+
+                                        // Vérifier si le stock est insuffisant
+                                        if (newStock < 0) {
+                                            db.query(
+                                                'SELECT Id_suppliers FROM suppliers LIMIT 1',
+                                                (err, result) => {
+                                                    if (err) return callback(err);
+                                                    if (result.length === 0) return callback(new Error("Aucun fournisseur disponible"));
+
+                                                    const Id_suppliers = result[0].Id_suppliers;
+                                                    const quantity_to_order = Math.abs(newStock); // Quantité manquante
+
+                                                    // Utiliser la fonction addStocks pour commander automatiquement
+                                                    module.exports.addStocks(Id_items, quantity_to_order, Id_suppliers, (err, supplierOrderResult) => {
+                                                        if (err) return callback(err);
+
+                                                        callback(null, {
+                                                            orderId,
+                                                            supplierOrderId: supplierOrderResult.orderId
+                                                        });
+                                                    });
+                                                }
+                                            );
+                                        } else {
+                                            callback(null, { message: "Commande effectuée avec succès", orderId });
+                                        }
+                                    }
+                                );
+                            }
+                        );
+                    }
+                );
             }
-
-            // Mise à jour du stock
-            db.query('UPDATE items SET stock_quantity = stock_quantity - ? WHERE Id_items = ?', [quantity, Id_items], (err) => {
-                if (err) return callback(err);
-
-                // Création de la commande
-                db.query('INSERT INTO orders (order_date, Id_users) VALUES (NOW(), ?)', [Id_users], (err, orderResult) => {
-                    if (err) return callback(err);
-
-                    const orderId = orderResult.insertId;
-
-                    // Enregistrement des détails de la commande avec le selling_price
-                    db.query(
-                        'INSERT INTO orders_users_details (quantity, price, Id_items, Id_orders) VALUES (?, ?, ?, ?)',
-                        [quantity, selling_price, Id_items, orderId], // Utiliser selling_price ici
-                        (err) => {
-                            if (err) return callback(err);
-
-                            callback(null, { message: 'Commande effectuée avec succès', orderId });
-                        }
-                    );
-                });
-            });
-        });
+        );
     },
+
 
     addStocks: (Id_items, quantity, Id_suppliers, callback) => {
             // Récupérer le prix de vente
@@ -140,6 +171,7 @@ const Items = {
                 });
             });
         },
+
 
 };
 

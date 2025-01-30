@@ -69,7 +69,7 @@ const UsersModel = {
     },
 
     loginUser: (data, callback) => {
-            const query = 'SELECT * FROM users WHERE username = ?';
+            const query = 'SELECT * FROM users WHERE username = ? AND isAdmin = 1';
             const values = [data.username];
 
             // On récup l'utilisateur qui repond à la requete
