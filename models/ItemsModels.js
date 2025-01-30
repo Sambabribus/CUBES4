@@ -74,18 +74,32 @@ const Items = {
     },
 
     sellUsers: (Id_items, quantity, Id_users, callback) => {
-        // Récupérer le stock et le prix de vente de l'article
+        // Récupérer le stock actuel et le prix de vente de l'article
         db.query(
             'SELECT stock_quantity, selling_price FROM items WHERE Id_items = ?',
             [Id_items],
             (err, result) => {
-                const { stock_quantity, selling_price } = result[0];
-                const newStock = stock_quantity - quantity;
+                if (err) return callback(err);
+                if (result.length === 0) return callback(new Error("Article introuvable"));
 
-                // Mettre à jour le stock de l'article
+                const {stock_quantity, selling_price} = result[0];
+
+                // Vérifier si le stock est suffisant pour la vente
+                if (stock_quantity < quantity) {
+
+                // Calculer la quantité à commander pour revenir à 10 si nécessaire
+                const remainingStockAfterSale = stock_quantity - quantity;
+                let quantity_to_order = 0;
+
+                // Si après la vente, le stock est inférieur à 10, on commande la différence
+                if (remainingStockAfterSale < 10) {
+                    quantity_to_order = 10 - remainingStockAfterSale;
+                }
+
+                // Mise à jour du stock après la vente
                 db.query(
-                    'UPDATE items SET stock_quantity = ? WHERE Id_items = ?',
-                    [newStock, Id_items],
+                    'UPDATE items SET stock_quantity = stock_quantity - ? WHERE Id_items = ?',
+                    [quantity, Id_items],
                     (err) => {
                         if (err) return callback(err);
 
@@ -104,8 +118,8 @@ const Items = {
                                     (err) => {
                                         if (err) return callback(err);
 
-                                        // Vérifier si le stock est insuffisant
-                                        if (newStock < 0) {
+                                        // Vérifier si une commande fournisseur est nécessaire
+                                        if (quantity_to_order > 0) {
                                             db.query(
                                                 'SELECT Id_suppliers FROM suppliers LIMIT 1',
                                                 (err, result) => {
@@ -113,13 +127,13 @@ const Items = {
                                                     if (result.length === 0) return callback(new Error("Aucun fournisseur disponible"));
 
                                                     const Id_suppliers = result[0].Id_suppliers;
-                                                    const quantity_to_order = Math.abs(newStock); // Quantité manquante
 
                                                     // Utiliser la fonction addStocks pour commander automatiquement
                                                     module.exports.addStocks(Id_items, quantity_to_order, Id_suppliers, (err, supplierOrderResult) => {
                                                         if (err) return callback(err);
 
                                                         callback(null, {
+                                                            message: "Commande effectuée avec réapprovisionnement automatique",
                                                             orderId,
                                                             supplierOrderId: supplierOrderResult.orderId
                                                         });
@@ -127,7 +141,7 @@ const Items = {
                                                 }
                                             );
                                         } else {
-                                            callback(null, { message: "Commande effectuée avec succès", orderId });
+                                            callback(null, {message: "Commande effectuée avec succès", orderId});
                                         }
                                     }
                                 );
@@ -135,6 +149,7 @@ const Items = {
                         );
                     }
                 );
+            }
             }
         );
     },
