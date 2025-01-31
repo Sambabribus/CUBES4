@@ -4,48 +4,72 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dc54f1a0-028e-468d-ae1e-56b070a6c2cc" name="Changes" comment="" />
+    <list default="true" id="5efa5814-cc79-4c38-a05b-4e0f64abc68b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
+        <option value="FxmlFile" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 4
-}]]></component>
-  <component name="ProjectId" id="2sLBvjl3hN0CTC052rcm85qRqGC" />
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\Program Files\PHP\php.exe" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2pf7gPDHLRt8L7ZQUUBSjNbH3gm" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.HelloApplication.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Developpement/Projet4/Groupe/application&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Developpement\Projet4\Groupe\application\application\src\main\resources\com\example\application\view\cmdFournisseurClient" />
+      <recent name="C:\Developpement\Projet4\Groupe\application (2)\application\src\main\java\com\example\application\controller\gestionInventaire" />
+      <recent name="C:\Developpement\Projet4\Groupe\application (2)\application\src\main\java\com\example\application\utils" />
+      <recent name="C:\Developpement\Projet4\Groupe\application (2)\application\src\main\resources\com\example\application\view\gestionStocks\commands\usersCommands" />
+      <recent name="C:\Developpement\CUBE4-grp\application2\application\src\main\resources\com\example\application\view\gestionStocks\create" />
+      <recent name="C:\Developpement\CUBE4-grp\application2\application\src\main\resources\com\example\application\view" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.application.utils" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -59,12 +83,30 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="dc54f1a0-028e-468d-ae1e-56b070a6c2cc" name="Changes" comment="" />
-      <created>1738225206289</created>
+      <changelist id="5efa5814-cc79-4c38-a05b-4e0f64abc68b" name="Changes" comment="" />
+      <created>1733145389296</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1738225206289</updated>
-      <workItem from="1738225207482" duration="7600000" />
+      <updated>1733145389296</updated>
+      <workItem from="1733145390403" duration="29663000" />
+      <workItem from="1733295100259" duration="6762000" />
+      <workItem from="1733386039500" duration="33923000" />
+      <workItem from="1733497128510" duration="3572000" />
+      <workItem from="1733729246161" duration="7819000" />
+      <workItem from="1733738045652" duration="12287000" />
+      <workItem from="1733840463214" duration="198000" />
+      <workItem from="1733840821773" duration="1184000" />
+      <workItem from="1734097242097" duration="363000" />
+      <workItem from="1736252074690" duration="636000" />
+      <workItem from="1736754018986" duration="3252000" />
+      <workItem from="1736759373419" duration="7366000" />
+      <workItem from="1736861344157" duration="9946000" />
+      <workItem from="1736871895004" duration="285000" />
+      <workItem from="1736872326574" duration="1951000" />
+      <workItem from="1736874311237" duration="260000" />
+      <workItem from="1736924771172" duration="17169000" />
+      <workItem from="1737013717231" duration="30517000" />
+      <workItem from="1737706299671" duration="19716000" />
     </task>
     <servers />
   </component>
