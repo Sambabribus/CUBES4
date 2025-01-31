@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="com.example.application.controller.gestionStocks.create.items.ItemsController"
+      alignment="CENTER" prefHeight="500.0" prefWidth="600.0">
+
+    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Ajout d'un article"/>
+
+    <VBox spacing="10" alignment="CENTER">
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Nom :"/>
+            <TextField fx:id="nameField" maxWidth="150"/>
+        </VBox>
+
+        <!-- Type d'alcool -->
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Type d'alcool :"/>
+            <ComboBox fx:id="typeAlcoholComboBox" maxWidth="150"/>
+        </VBox>
+
+        <!-- Nom du domaine -->
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Nom du domaine :"/>
+            <TextField fx:id="domainNameField" maxWidth="150"/>
+        </VBox>
+
+        <!-- Millésime -->
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Millésime :"/>
+            <TextField fx:id="millesimeField" maxWidth="150"/>
+        </VBox>
+
+        <!-- Prix d'achat -->
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Prix d'achat :"/>
+            <TextField fx:id="purchasePriceField" maxWidth="150"/>
+        </VBox>
+
+        <!-- Prix de vente -->
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Prix de vente :"/>
+            <TextField fx:id="sellingPriceField" maxWidth="150"/>
+        </VBox>
+
+        <!-- Quantité en stock -->
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Quantité en stock :"/>
+            <TextField fx:id="stockQuantityField" maxWidth="150"/>
+        </VBox>
+
+        <!-- Description -->
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="150">
+            <Label text="Description :"/>
+            <TextField fx:id="descriptionField" maxWidth="150"/>
+        </VBox>
+    </VBox>
+
+    <HBox spacing="30" alignment="CENTER">
+        <Button text="Créer" onAction="#handleCreateButton"/>
+    </HBox>
+</VBox>

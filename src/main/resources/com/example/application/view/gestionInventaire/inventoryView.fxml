@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="20.0"
+      fx:controller="com.example.application.controller.gestionInventaire.InventoryController"
+      prefHeight="600" prefWidth="800">
+    <!-- Titre de la recherche -->
+    <Label text="Employés" style="-fx-font-size: 20px;"/>
+
+
+    <!-- Tableau pour afficher les résultats des employés -->
+    <TableView fx:id="itemsTableView" prefHeight="300" prefWidth="400"/>
+    <Button text="Supprimer" onAction="#onDeleteButtonClick"/>
+
+
+    <padding>
+        <Insets top="20" bottom="20" left="20" right="20"/>
+    </padding>
+
+</VBox>
