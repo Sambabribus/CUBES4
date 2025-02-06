@@ -2,6 +2,10 @@ module com.example.application {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.fasterxml.jackson.databind;
+    requires org.testfx;
+    requires javafx.graphics;
+    requires javafx.base;
+    requires java.desktop;
 
     requires org.controlsfx.controls;
     requires net.synedra.validatorfx;
@@ -9,7 +13,6 @@ module com.example.application {
     requires org.apache.commons.codec;
     requires java.sql;
     requires com.fasterxml.jackson.datatype.jsr310;
-    requires java.desktop;
 
     opens com.example.application.view to javafx.fxml;
 
@@ -17,7 +20,8 @@ module com.example.application {
     exports com.example.application.model;
     exports com.example.application;
     exports com.example.application.controller;
-    opens com.example.application.controller to javafx.fxml;
+    exports com.example.application.service;
+    opens com.example.application.controller to javafx.fxml, org.testfx;
     exports com.example.application.controller.gestionStocks;
     opens com.example.application.controller.gestionStocks to javafx.fxml;
     exports com.example.application.controller.gestionStocks.create;
@@ -37,6 +41,5 @@ module com.example.application {
     opens com.example.application.utils to javafx.fxml;
     exports com.example.application.controller.cmdFournisseurClient;
     opens com.example.application.controller.cmdFournisseurClient to javafx.fxml;
-
 
 }

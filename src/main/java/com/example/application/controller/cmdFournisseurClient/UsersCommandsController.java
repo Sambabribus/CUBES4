@@ -31,6 +31,11 @@ public class UsersCommandsController {
         this.usersService = new UsersService();
     }
 
+    public UsersCommandsController(ItemsService itemsService, UsersService usersService) {
+        this.itemsService = itemsService;
+        this.usersService = usersService;
+    }
+
     @FXML
     public void initialize() {
         // récuperation de l'ensemble des valeurs pas seulement l'affichage des toString

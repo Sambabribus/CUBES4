@@ -2,6 +2,7 @@ package com.example.application.service;
 
 import com.example.application.contracts.SuppliersInterface;
 import com.example.application.model.Suppliers;
+import com.example.application.utils.HttpClientService;
 
 import java.util.List;
 
@@ -11,6 +12,10 @@ public class SuppliersService implements SuppliersInterface {
 
     public SuppliersService() {
         this.httpClientService = new HttpClientService();
+    }
+
+    public SuppliersService(HttpClientService httpClientService) {
+        this.httpClientService = httpClientService;
     }
 
     @Override

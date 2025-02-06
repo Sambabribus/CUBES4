@@ -2,6 +2,7 @@ package com.example.application.service;
 
 import com.example.application.contracts.ItemsInterface;
 import com.example.application.model.Items;
+import com.example.application.utils.HttpClientService;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,10 @@ public class ItemsService implements ItemsInterface {
 
     public ItemsService() {
         this.httpClientService = new HttpClientService();
+    }
+
+    public ItemsService(HttpClientService httpClientService) {
+        this.httpClientService = httpClientService;
     }
 
     @Override
