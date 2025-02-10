@@ -74,6 +74,8 @@ const Items = {
     },
 
     sellUsers: (Id_items, quantity, Id_users, callback) => {
+        if (quantity <= 0) return callback(new Error("La quantité doit être positive"));
+
         // Récupérer le stock actuel et le prix de vente de l'article
         db.query(
             'SELECT stock_quantity, selling_price FROM items WHERE Id_items = ?',
@@ -82,10 +84,7 @@ const Items = {
                 if (err) return callback(err);
                 if (result.length === 0) return callback(new Error("Article introuvable"));
 
-                const {stock_quantity, selling_price} = result[0];
-
-                // Vérifier si le stock est suffisant pour la vente
-                if (stock_quantity < quantity) {
+                const { stock_quantity, selling_price } = result[0];
 
                 // Calculer la quantité à commander pour revenir à 10 si nécessaire
                 const remainingStockAfterSale = stock_quantity - quantity;
@@ -96,62 +95,88 @@ const Items = {
                     quantity_to_order = 10 - remainingStockAfterSale;
                 }
 
-                // Mise à jour du stock après la vente
-                db.query(
-                    'UPDATE items SET stock_quantity = stock_quantity - ? WHERE Id_items = ?',
-                    [quantity, Id_items],
-                    (err) => {
-                        if (err) return callback(err);
+                // Utiliser une transaction pour garantir la cohérence des données
+                db.beginTransaction((err) => {
+                    if (err) return callback(err);
 
-                        // Enregistrer la commande utilisateur
-                        db.query(
-                            'INSERT INTO orders (order_date, Id_users) VALUES (NOW(), ?)',
-                            [Id_users],
-                            (err, orderResult) => {
-                                if (err) return callback(err);
-
-                                const orderId = orderResult.insertId;
-
-                                db.query(
-                                    'INSERT INTO orders_users_details (quantity, price, Id_items, Id_orders) VALUES (?, ?, ?, ?)',
-                                    [quantity, selling_price, Id_items, orderId],
-                                    (err) => {
-                                        if (err) return callback(err);
-
-                                        // Vérifier si une commande fournisseur est nécessaire
-                                        if (quantity_to_order > 0) {
-                                            db.query(
-                                                'SELECT Id_suppliers FROM suppliers LIMIT 1',
-                                                (err, result) => {
-                                                    if (err) return callback(err);
-                                                    if (result.length === 0) return callback(new Error("Aucun fournisseur disponible"));
-
-                                                    const Id_suppliers = result[0].Id_suppliers;
-
-                                                    // Utiliser la fonction addStocks pour commander automatiquement
-                                                    module.exports.addStocks(Id_items, quantity_to_order, Id_suppliers, (err, supplierOrderResult) => {
-                                                        if (err) return callback(err);
-
-                                                        callback(null, {
-                                                            message: "Commande effectuée avec réapprovisionnement automatique",
-                                                            orderId,
-                                                            supplierOrderId: supplierOrderResult.orderId
-                                                        });
-                                                    });
-                                                }
-                                            );
-                                        } else {
-                                            callback(null, {message: "Commande effectuée avec succès", orderId});
-                                        }
-                                    }
-                                );
+                    // Mise à jour du stock après la vente
+                    db.query(
+                        'UPDATE items SET stock_quantity = stock_quantity - ? WHERE Id_items = ?',
+                        [quantity, Id_items],
+                        (err) => {
+                            if (err) {
+                                return db.rollback(() => callback(err));
                             }
-                        );
-                    }
-                );
+
+                            // Enregistrer la commande utilisateur
+                            db.query(
+                                'INSERT INTO orders (order_date, Id_users) VALUES (NOW(), ?)',
+                                [Id_users],
+                                (err, orderResult) => {
+                                    if (err) {
+                                        return db.rollback(() => callback(err));
+                                    }
+
+                                    const orderId = orderResult.insertId;
+
+                                    db.query(
+                                        'INSERT INTO orders_users_details (quantity, price, Id_items, Id_orders) VALUES (?, ?, ?, ?)',
+                                        [quantity, selling_price, Id_items, orderId],
+                                        (err) => {
+                                            if (err) {
+                                                return db.rollback(() => callback(err));
+                                            }
+
+                                            // Si le stock devient insuffisant après la vente, on peut envisager de commander des stocks supplémentaires
+                                            if (quantity_to_order > 0) {
+                                                db.query(
+                                                    'SELECT Id_suppliers FROM suppliers LIMIT 1',
+                                                    (err, result) => {
+                                                        if (err) {
+                                                            return db.rollback(() => callback(err));
+                                                        }
+                                                        if (result.length === 0) {
+                                                            return db.rollback(() => callback(new Error("Aucun fournisseur disponible")));
+                                                        }
+
+                                                        const Id_suppliers = result[0].Id_suppliers;
+
+                                                        // Utiliser la fonction addStocks pour commander automatiquement
+                                                        module.exports.addStocks(Id_items, quantity_to_order, Id_suppliers, (err, supplierOrderResult) => {
+                                                            if (err) {
+                                                                return db.rollback(() => callback(err));
+                                                            }
+
+                                                            db.commit((err) => {
+                                                                if (err) {
+                                                                    return db.rollback(() => callback(err));
+                                                                }
+                                                                callback(null, {
+                                                                    message: "Commande effectuée avec réapprovisionnement automatique",
+                                                                    orderId,
+                                                                    supplierOrderId: supplierOrderResult.orderId
+                                                                });
+                                                            });
+                                                        });
+                                                    }
+                                                );
+                                            } else {
+                                                db.commit((err) => {
+                                                    if (err) {
+                                                        return db.rollback(() => callback(err));
+                                                    }
+                                                    callback(null, { message: "Commande effectuée avec succès", orderId });
+                                                });
+                                            }
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    );
+                });
             }
-            }
-        );
+        )
     },
 
 

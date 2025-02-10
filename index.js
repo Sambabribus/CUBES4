@@ -22,15 +22,9 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 
 // Middleware pour CORS
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('CORS non autorisé pour cette origine'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Méthodes HTTP autorisées
-    credentials: true
+    origin: 'http://localhost:5173', // Autorise uniquement le frontend
+    methods: 'GET,POST,PUT,DELETE', // Méthodes HTTP autorisées
+    credentials: true, // Si tu utilises des cookies ou des en-têtes sécurisés
 }));
 
 
